@@ -11,6 +11,8 @@ import com.paqser.inventario.domain.models.DetailSale;
 import com.paqser.inventario.domain.persistencePorts.SalePersistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ public class SalePersistenceMySql implements SalePersistence {
     }
 
     @Override
+    @Transactional(rollbackFor = { Exception.class })
     public Sale registerSale(Sale sale) {
 
         SaleEntity saleEntity = this.saleRepository
@@ -51,7 +54,8 @@ public class SalePersistenceMySql implements SalePersistence {
             if (validateDetailSale(i, detailSale, detailProductEntity)) {
 
                 detailSaleEntities.add(new DetailSaleEntity(detailSale, detailProductEntity, saleEntity));
-
+                this.detailProductRepository.updateStockById(detailProductEntity.getIdDetailProduct(),
+                        detailProductEntity.getStock().subtract(detailSale.getSaleCount()));
                 total = total.add(sale.getDetailSaleList().get(i).getSubTotal());
                 i += 1;
 
@@ -76,14 +80,14 @@ public class SalePersistenceMySql implements SalePersistence {
         if (detailProductEntity == null)
             throw new RuntimeException("No existe el detalle de producto con codigo: " + detailSale.getIdDetailProduct());
 
-        if (detailSale.getSaleCount() > detailProductEntity.getStock())
+        if (detailSale.getSaleCount().compareTo(detailProductEntity.getStock()) > 0)
             throw new RuntimeException("El stock es insuficiente para realizar la venta.\n" +
                     "indice del detalle de venta: " + index + "\n" +
                     "Stock pedido: " + detailSale.getSaleCount() + "\n" +
                     "Stock disponible: " + detailProductEntity.getStock());
 
         BigDecimal subtotal = detailProductEntity.getSalePrice()
-                .multiply(BigDecimal.valueOf(detailSale.getSaleCount()));
+                .multiply(detailSale.getSaleCount());
 
         if (!detailSale.getSubTotal().equals(subtotal))
             throw new RuntimeException("Hubo un error al calcular el subtotal del detalle de venta.\n" +

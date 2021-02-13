@@ -15,7 +15,7 @@ public class DetailProductEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idDetailProduct;
     private String netContent;
-    private Long stock;
+    private BigDecimal stock;
     private String saleUnit;
     private BigDecimal salePrice;
 
@@ -32,7 +32,7 @@ public class DetailProductEntity {
         this.product = product;
     }
 
-    public DetailProductEntity(Long idDetailProduct, Long stock, BigDecimal salePrice) {
+    public DetailProductEntity(Long idDetailProduct, BigDecimal stock, BigDecimal salePrice) {
         this.idDetailProduct = idDetailProduct;
         this.stock = stock;
         this.salePrice = salePrice;
@@ -54,11 +54,11 @@ public class DetailProductEntity {
         this.netContent = netContent;
     }
 
-    public Long getStock() {
+    public BigDecimal getStock() {
         return stock;
     }
 
-    public void setStock(Long stock) {
+    public void setStock(BigDecimal stock) {
         this.stock = stock;
     }
 

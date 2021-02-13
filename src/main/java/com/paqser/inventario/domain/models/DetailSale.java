@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public class DetailSale {
 
     private Long idDetailSale;
-    private Long saleCount;
+    private BigDecimal saleCount;
     private BigDecimal subTotal;
     private Long idDetailProduct;
     private Long idSale;
@@ -22,11 +22,11 @@ public class DetailSale {
         this.idDetailSale = idDetailSale;
     }
 
-    public Long getSaleCount() {
+    public BigDecimal getSaleCount() {
         return saleCount;
     }
 
-    public void setSaleCount(Long saleCount) {
+    public void setSaleCount(BigDecimal saleCount) {
         this.saleCount = saleCount;
     }
 
