@@ -1,7 +1,5 @@
 package com.paqser.inventario.domain.models;
 
-import java.util.Objects;
-
 public class ProductType {
     private Long idProductType;
     private String nameProductType;

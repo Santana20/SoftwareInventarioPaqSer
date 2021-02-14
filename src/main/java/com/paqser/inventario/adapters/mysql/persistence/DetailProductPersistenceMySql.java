@@ -5,12 +5,10 @@ import com.paqser.inventario.adapters.mysql.daos.ProductRepository;
 import com.paqser.inventario.adapters.mysql.entities.DetailProductEntity;
 import com.paqser.inventario.adapters.mysql.entities.ProductEntity;
 import com.paqser.inventario.domain.models.DetailProduct;
-import com.paqser.inventario.domain.models.Product;
 import com.paqser.inventario.domain.persistencePorts.DetailProductPersistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
 import java.util.stream.Stream;
 
 @Repository("DetailProductPersistence")

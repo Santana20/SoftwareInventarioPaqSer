@@ -14,7 +14,7 @@ public class DetailSaleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idDetailSale;
-    private Long saleCount;
+    private BigDecimal saleCount;
     private BigDecimal subTotal;
 
     @ManyToOne(optional = false)
@@ -49,11 +49,11 @@ public class DetailSaleEntity {
         this.idDetailSale = idDetailSale;
     }
 
-    public Long getSaleCount() {
+    public BigDecimal getSaleCount() {
         return saleCount;
     }
 
-    public void setSaleCount(Long saleCount) {
+    public void setSaleCount(BigDecimal saleCount) {
         this.saleCount = saleCount;
     }
 

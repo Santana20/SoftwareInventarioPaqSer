@@ -2,13 +2,9 @@ package com.paqser.inventario.adapters.rest;
 
 import com.paqser.inventario.domain.models.Product;
 import com.paqser.inventario.domain.services.ProductService;
-import com.sun.deploy.net.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.stream.Stream;

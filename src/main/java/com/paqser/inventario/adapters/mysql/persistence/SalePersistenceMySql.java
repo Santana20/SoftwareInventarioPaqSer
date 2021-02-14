@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Repository("SalePersistence")
@@ -37,7 +38,8 @@ public class SalePersistenceMySql implements SalePersistence {
     @Override
     @Transactional(rollbackFor = { Exception.class })
     public Sale registerSale(Sale sale) {
-
+        
+        sale.setDateSale(new Date());
         SaleEntity saleEntity = this.saleRepository
                 .save(new SaleEntity(sale));
 

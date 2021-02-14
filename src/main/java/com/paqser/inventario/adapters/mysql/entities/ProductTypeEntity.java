@@ -1,6 +1,5 @@
 package com.paqser.inventario.adapters.mysql.entities;
 
-import com.paqser.inventario.domain.models.Product;
 import com.paqser.inventario.domain.models.ProductType;
 import org.springframework.beans.BeanUtils;
 
