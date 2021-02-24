@@ -84,8 +84,10 @@ public class ProductEntity {
     public Product toProduct() {
         Product product = new Product();
         BeanUtils.copyProperties(this, product);
-        product.setIdBrand(this.brand.getIdBrand());
-        product.setIdProductType(this.productType.getIdProductType());
+        // product.setIdBrand(this.brand.getIdBrand());
+        // product.setIdProductType(this.productType.getIdProductType());
+        product.setBrand(this.brand.toBrand());
+        product.setProductType(this.productType.toProductType());
         if (this.detailProductEntityList != null)
             product.setDetailProductsList(this.detailProductEntityList.stream().map(
                 DetailProductEntity::toDetailProduct

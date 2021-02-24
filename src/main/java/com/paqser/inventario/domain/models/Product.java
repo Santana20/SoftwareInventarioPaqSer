@@ -5,8 +5,8 @@ import java.util.List;
 public class Product {
     private String idProduct;
     private String nameProduct;
-    private Long idBrand;
-    private Long idProductType;
+    private Brand brand;
+    private ProductType productType;
     private List<DetailProduct> detailProductsList;
 
     public String getIdProduct() {
@@ -25,22 +25,31 @@ public class Product {
         this.nameProduct = nameProduct;
     }
 
-    public Long getIdBrand() {
-        return idBrand;
+    public Brand getBrand() {
+        return brand;
     }
 
-    public void setIdBrand(Long idBrand) {
-        this.idBrand = idBrand;
+    public void setBrand(Brand brand) {
+        this.brand = brand;
     }
 
-    public Long getIdProductType() {
-        return idProductType;
+    public ProductType getProductType() {
+        return productType;
     }
 
-    public void setIdProductType(Long idProductType) {
-        this.idProductType = idProductType;
+    public void setProductType(ProductType productType) {
+        this.productType = productType;
     }
-
+    public Long getIdBrand()
+    {
+        if (this.brand == null) return null;
+        return this.brand.getIdBrand();
+    }
+    public Long getIdProductType()
+    {
+        if (this.productType == null) return null;
+        return this.productType.getIdProductType();
+    }
     public List<DetailProduct> getDetailProductsList() {
         return detailProductsList;
     }
@@ -54,8 +63,6 @@ public class Product {
         return "Product{" +
                 "idProduct='" + idProduct + '\'' +
                 ", nameProduct='" + nameProduct + '\'' +
-                ", idBrand=" + idBrand +
-                ", detailProductsList=" + detailProductsList +
                 '}';
     }
 }

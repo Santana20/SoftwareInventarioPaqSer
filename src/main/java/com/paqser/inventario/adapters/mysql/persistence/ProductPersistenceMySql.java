@@ -36,6 +36,7 @@ public class ProductPersistenceMySql implements ProductPersistence {
         return this.productRepository.existsById(idProduct);
     }
 
+
     @Override
     public Product createProduct(Product newProduct) throws Exception {
 
