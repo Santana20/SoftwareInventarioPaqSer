@@ -42,6 +42,6 @@ public class BrandPersisitenceMySql implements BrandPersistence {
     @Override
     public Stream<Brand> listAllBrands() {
         return this.brandRepository.findAll().stream()
-                .map(brandEntity -> brandEntity.toBrand());
+                .map(BrandEntity::toBrand);
     }
 }

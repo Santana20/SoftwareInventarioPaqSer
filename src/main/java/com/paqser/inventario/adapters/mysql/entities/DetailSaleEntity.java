@@ -40,6 +40,14 @@ public class DetailSaleEntity {
     public void fromDetailSale(DetailSale detailSale) {
         BeanUtils.copyProperties(detailSale, this);
     }
+    public DetailSale toDetailSale()
+    {
+        DetailSale detailSale = new DetailSale();
+        BeanUtils.copyProperties(this, detailSale);
+        detailSale.setIdDetailProduct(this.detailProductEntity.getIdDetailProduct());
+
+        return detailSale;
+    }
 
     public Long getIdDetailSale() {
         return idDetailSale;

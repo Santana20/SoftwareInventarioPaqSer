@@ -5,6 +5,8 @@ import com.paqser.inventario.domain.persistencePorts.SalePersistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.stream.Stream;
+
 @Service
 public class SaleService {
 
@@ -18,5 +20,8 @@ public class SaleService {
     public Sale registerSale(Sale sale) {
         return this.salePersistence.registerSale(sale);
     }
-
+    public Stream<Sale> listSales()
+    {
+        return this.salePersistence.listSales();
+    }
 }

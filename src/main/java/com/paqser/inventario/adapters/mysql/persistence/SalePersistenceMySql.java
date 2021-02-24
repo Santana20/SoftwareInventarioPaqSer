@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Repository("SalePersistence")
 public class SalePersistenceMySql implements SalePersistence {
@@ -74,6 +75,12 @@ public class SalePersistenceMySql implements SalePersistence {
 
         return saleEntity.toSale();
 
+    }
+
+    @Override
+    public Stream<Sale> listSales() {
+        return this.saleRepository.findAll()
+                .stream().map(SaleEntity::toSale);
     }
 
     private boolean validateDetailSale(int index, DetailSale detailSale,
