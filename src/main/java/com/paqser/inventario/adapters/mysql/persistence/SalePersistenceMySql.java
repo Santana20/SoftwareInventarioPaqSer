@@ -6,6 +6,7 @@ import com.paqser.inventario.adapters.mysql.daos.SaleRepository;
 import com.paqser.inventario.adapters.mysql.entities.DetailProductEntity;
 import com.paqser.inventario.adapters.mysql.entities.DetailSaleEntity;
 import com.paqser.inventario.adapters.mysql.entities.SaleEntity;
+import com.paqser.inventario.adapters.utils.DTOClass.SalePDF;
 import com.paqser.inventario.domain.models.Sale;
 import com.paqser.inventario.domain.models.DetailSale;
 import com.paqser.inventario.domain.persistencePorts.SalePersistence;
@@ -88,6 +89,19 @@ public class SalePersistenceMySql implements SalePersistence {
         return this.saleRepository
                 .findAllByDateSaleBetween(ini, fin).stream()
                 .map(SaleEntity::toSale);
+    }
+
+    @Override
+    public Stream<SalePDF> listSalesPDF() {
+        return this.saleRepository.findAll()
+                .stream().map(SalePDF::new);
+    }
+
+    @Override
+    public Stream<SalePDF> listSalesByDatePDF(Date ini, Date fin) {
+        return this.saleRepository
+                .findAllByDateSaleBetween(ini, fin).stream()
+                .map(SalePDF::new);
     }
 
     private boolean validateDetailSale(int index, DetailSale detailSale,

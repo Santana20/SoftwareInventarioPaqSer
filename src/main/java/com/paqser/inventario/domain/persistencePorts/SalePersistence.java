@@ -1,5 +1,6 @@
 package com.paqser.inventario.domain.persistencePorts;
 
+import com.paqser.inventario.adapters.utils.DTOClass.SalePDF;
 import com.paqser.inventario.domain.models.Sale;
 import org.springframework.stereotype.Repository;
 
@@ -14,5 +15,9 @@ public interface SalePersistence {
     Stream<Sale> listSales();
 
     Stream<Sale> listSalesByDate(Date ini, Date fin);
+
+    Stream<SalePDF> listSalesPDF();
+
+    Stream<SalePDF> listSalesByDatePDF(Date ini, Date fin);
 
 }

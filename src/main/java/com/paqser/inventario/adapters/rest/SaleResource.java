@@ -1,5 +1,6 @@
 package com.paqser.inventario.adapters.rest;
 
+import com.paqser.inventario.adapters.utils.DTOClass.SalePDF;
 import com.paqser.inventario.adapters.utils.SalePDFExporter;
 import com.paqser.inventario.domain.models.Sale;
 import com.paqser.inventario.domain.services.SaleService;
@@ -58,14 +59,15 @@ public class SaleResource {
             String headerValue = "attachment; filename = sales_" + currentDateTime + ".pdf";
             response.setHeader(headerKey, headerValue);
             */
-            Stream<Sale> listSales = null;
+            Stream<SalePDF> listSalesPDF = null;
             if (day != null) {
                 Date dateIni = new SimpleDateFormat("yyyy-MM-dd").parse(day);
                 Date dateFin = new Date(dateIni.getYear(), dateIni.getMonth(), dateIni.getDate(), 23, 59, 59);
-                listSales = this.saleService.listSalesByDate(dateIni, dateFin);
+                listSalesPDF = this.saleService.listSalesByDatePDF(dateIni, dateFin);
             }
-            else listSales = this.saleService.listSales();
-            SalePDFExporter exporter = new SalePDFExporter(listSales);
+            else listSalesPDF = this.saleService.listSalesPDF();
+            SalePDFExporter exporter = new SalePDFExporter(listSalesPDF);
+
 
             exporter.export(response);
         }
