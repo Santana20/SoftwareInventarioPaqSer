@@ -44,9 +44,6 @@ public class ProductResource {
 
         Stream<Product> productStream;
         try {
-            System.out.println(name);
-            System.out.println(idBrand);
-            System.out.println(idProductType);
             productStream = this.productService.searchProducts(name, idBrand, idProductType);
         }
         catch (Exception e) {

@@ -83,6 +83,13 @@ public class SalePersistenceMySql implements SalePersistence {
                 .stream().map(SaleEntity::toSale);
     }
 
+    @Override
+    public Stream<Sale> listSalesByDate(Date ini, Date fin) {
+        return this.saleRepository
+                .findAllByDateSaleBetween(ini, fin).stream()
+                .map(SaleEntity::toSale);
+    }
+
     private boolean validateDetailSale(int index, DetailSale detailSale,
                                                    DetailProductEntity detailProductEntity) {
 

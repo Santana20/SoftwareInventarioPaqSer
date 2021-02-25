@@ -27,7 +27,7 @@ public class SalePDFExporter {
     }
 
     public void export(HttpServletResponse response) throws IOException {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
         Document documentPDF = new Document(PageSize.A4);
         PdfWriter.getInstance(documentPDF, response.getOutputStream());
@@ -35,21 +35,22 @@ public class SalePDFExporter {
         documentPDF.open();
 
         documentPDF.add(new Paragraph("Lista de todas las ventas"));
+        if (listSales != null)
+        {
+            listSales.forEach(sale -> {
+                documentPDF.add(new Paragraph("Venta: #" + sale.getIdSale().toString()));
+                documentPDF.add(new Paragraph("Dia: " + dateFormat.format(sale.getDateSale())));
+                documentPDF.add(new Paragraph("Total: " + sale.getTotal().toString()));
 
-        listSales.forEach(sale -> {
-            documentPDF.add(new Paragraph("Venta: #" + sale.getIdSale().toString()));
-            documentPDF.add(new Paragraph("Dia: " + dateFormat.format(sale.getDateSale())));
-            documentPDF.add(new Paragraph("Total: " + sale.getTotal().toString()));
+                PdfPTable table = new PdfPTable(3);
+                table.setWidthPercentage(100);
+                table.setSpacingBefore(10);
 
-            PdfPTable table = new PdfPTable(3);
-            table.setWidthPercentage(100);
-            table.setSpacingBefore(10);
-
-            writeTableHeader(table);
-            writeTableData(table, sale.getDetailSaleList());
-            documentPDF.add(table);
-        });
-
+                writeTableHeader(table);
+                writeTableData(table, sale.getDetailSaleList());
+                documentPDF.add(table);
+            });
+        }
         documentPDF.close();
     }
 

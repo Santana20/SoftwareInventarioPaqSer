@@ -45,21 +45,28 @@ public class SaleResource {
         return sale;
     }
     @GetMapping(SaleResource.EXPORTPDF)
-    public void exportSalePdf(HttpServletResponse response)
+    public void exportSalePdf(HttpServletResponse response,
+                              @RequestParam(value = "day", required = false) String day)
     {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-        String currentDateTime = dateFormat.format(new Date());
-
-        response.setContentType("application/pdf");
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename = sales_" + currentDateTime + ".pdf";
-        response.setHeader(headerKey, headerValue);
-
-        Stream<Sale> listSales = this.saleService.listSales();
-
-        SalePDFExporter exporter = new SalePDFExporter(listSales);
         try
         {
+            response.setContentType("application/pdf");
+            /*
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+            String currentDateTime = dateFormat.format(new Date());
+            String headerKey = "Content-Disposition";
+            String headerValue = "attachment; filename = sales_" + currentDateTime + ".pdf";
+            response.setHeader(headerKey, headerValue);
+            */
+            Stream<Sale> listSales = null;
+            if (day != null) {
+                Date dateIni = new SimpleDateFormat("yyyy-MM-dd").parse(day);
+                Date dateFin = new Date(dateIni.getYear(), dateIni.getMonth(), dateIni.getDate(), 23, 59, 59);
+                listSales = this.saleService.listSalesByDate(dateIni, dateFin);
+            }
+            else listSales = this.saleService.listSales();
+            SalePDFExporter exporter = new SalePDFExporter(listSales);
+
             exporter.export(response);
         }
         catch(Exception e)

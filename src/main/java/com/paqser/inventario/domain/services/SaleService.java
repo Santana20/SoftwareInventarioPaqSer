@@ -5,6 +5,7 @@ import com.paqser.inventario.domain.persistencePorts.SalePersistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.stream.Stream;
 
 @Service
@@ -23,5 +24,9 @@ public class SaleService {
     public Stream<Sale> listSales()
     {
         return this.salePersistence.listSales();
+    }
+    public Stream<Sale> listSalesByDate(Date ini, Date fin)
+    {
+        return this.salePersistence.listSalesByDate(ini, fin);
     }
 }
