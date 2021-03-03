@@ -1,8 +1,8 @@
 package com.paqser.inventario.adapters.utils.DTOClass;
 
-import com.paqser.inventario.adapters.mysql.entities.DetailProductEntity;
-import com.paqser.inventario.adapters.mysql.entities.DetailSaleEntity;
-import com.paqser.inventario.adapters.mysql.entities.ProductEntity;
+import com.paqser.inventario.domain.models.DetailProduct;
+import com.paqser.inventario.domain.models.DetailSale;
+import com.paqser.inventario.domain.models.Product;
 
 import java.math.BigDecimal;
 
@@ -13,19 +13,19 @@ public class DetailSalePDF {
     private BigDecimal unitPrice;
     private BigDecimal count;
     private BigDecimal subTotal;
-    public DetailSalePDF(DetailSaleEntity detailSaleEntity) {
-        this.subTotal = detailSaleEntity.getSubTotal();
-        this.count = detailSaleEntity.getSaleCount();
-        DetailProductEntity detailProductEntity = detailSaleEntity.getDetailProductEntity();
-        if (detailProductEntity != null)
+    public DetailSalePDF(DetailSale detailSale) {
+        this.subTotal = detailSale.getSubTotal();
+        this.count = detailSale.getSaleCount();
+        DetailProduct detailProduct = detailSale.getDetailProduct();
+        if (detailProduct != null)
         {
-            this.unitPrice = detailProductEntity.getSalePrice();
-            ProductEntity productEntity = detailProductEntity.getProduct();
-            if (productEntity != null)
+            this.unitPrice = detailProduct.getSalePrice();
+            Product product = detailProduct.getProduct();
+            if (product != null)
             {
-                this.description = productEntity.getNameProduct() + " / " +
-                                    detailProductEntity.getNetContent();
-                this.code = productEntity.getIdProduct();
+                this.description = product.getNameProduct() + " / " +
+                                    detailProduct.getNetContent();
+                this.code = product.getIdProduct();
             }
         }
     }

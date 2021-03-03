@@ -1,12 +1,13 @@
 package com.paqser.inventario.adapters.mysql.entities;
 
+import com.paqser.inventario.domain.models.DetailProduct;
 import com.paqser.inventario.domain.models.Product;
 import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name="Product")
@@ -24,7 +25,7 @@ public class ProductEntity {
     @JoinColumn(name = "idProductType")
     private ProductTypeEntity productType;
 
-    @OneToMany(mappedBy = "product",
+    @OneToMany(mappedBy = "productEntity",
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
     private List<DetailProductEntity> detailProductEntityList;
@@ -32,7 +33,6 @@ public class ProductEntity {
     public ProductEntity() {
         // empty for framework
     }
-
     public ProductEntity(Product product) {
         BeanUtils.copyProperties(product, this);
     }
@@ -83,15 +83,33 @@ public class ProductEntity {
 
     public Product toProduct() {
         Product product = new Product();
+
         BeanUtils.copyProperties(this, product);
-        // product.setIdBrand(this.brand.getIdBrand());
-        // product.setIdProductType(this.productType.getIdProductType());
+
         product.setBrand(this.brand.toBrand());
         product.setProductType(this.productType.toProductType());
-        if (this.detailProductEntityList != null)
-            product.setDetailProductsList(this.detailProductEntityList.stream().map(
-                DetailProductEntity::toDetailProduct
-            ).collect(Collectors.toList()));
+
+        if (this.detailProductEntityList != null && this.detailProductEntityList.size() > 0) {
+            List<DetailProduct> list = new ArrayList<>();
+            for (DetailProductEntity detailProductEntity : this.detailProductEntityList) {
+                DetailProduct toDetailProduct = detailProductEntity.toDetailProductForProductConstruct();
+                list.add(toDetailProduct);
+            }
+            product.setDetailProductsList(list);
+        }
+
+        return product;
+    }
+
+    public Product toProductForDetailProductConstruct()
+    {
+        Product product = new Product();
+
+        BeanUtils.copyProperties(this, product);
+
+        product.setBrand(this.brand.toBrand());
+        product.setProductType(this.productType.toProductType());
+
         return product;
     }
 
@@ -109,13 +127,4 @@ public class ProductEntity {
         return Objects.hash(idProduct);
     }
 
-    @Override
-    public String toString() {
-        return "ProductEntity{" +
-                "idProduct='" + idProduct + '\'' +
-                ", nameProduct='" + nameProduct + '\'' +
-                ", Brand=" + brand +
-                ", productType=" + productType +
-                '}';
-    }
 }

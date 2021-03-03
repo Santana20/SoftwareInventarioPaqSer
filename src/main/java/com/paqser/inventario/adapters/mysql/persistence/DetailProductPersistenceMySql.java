@@ -26,6 +26,9 @@ public class DetailProductPersistenceMySql implements DetailProductPersistence {
 
     @Override
     public DetailProduct createDetailProduct(DetailProduct detailProduct) {
+        if (detailProduct.getIdProduct() == null)
+            throw new RuntimeException("Debe ingresar el codigo del producto para registrar la presentacion de producto.");
+
         ProductEntity product = this.productRepository.findByIdProduct(detailProduct.getIdProduct());
 
         if (product == null)

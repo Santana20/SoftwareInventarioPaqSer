@@ -10,11 +10,7 @@ import java.math.BigDecimal;
 
 public interface DetailProductRepository extends JpaRepository<DetailProductEntity, Long> {
 
-    @Query("select new DetailProductEntity(c.idDetailProduct, c.stock, c.salePrice) " +
-            "from DetailProductEntity c where c.idDetailProduct = :id")
-    DetailProductEntity findByIdDetailProductSimple(@Param("id") Long idDetailProduct);
-
-    DetailProductEntity findByIdDetailProduct(Long idDetailProduct);
+    <T> T findByIdDetailProduct(Long idDetailProduct, Class<T> type);
 
     @Modifying
     @Query("update DetailProductEntity d set " +

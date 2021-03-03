@@ -1,5 +1,6 @@
 package com.paqser.inventario.adapters.mysql.persistence;
 
+import com.paqser.inventario.adapters.mysql.DTOClass.ProductWithoutDetailProducts;
 import com.paqser.inventario.adapters.mysql.daos.BrandRepository;
 import com.paqser.inventario.adapters.mysql.daos.ProductRepository;
 import com.paqser.inventario.adapters.mysql.daos.ProductTypeRepository;
@@ -93,7 +94,7 @@ public class ProductPersistenceMySql implements ProductPersistence {
     @Override
     public Stream<Product> searchProducts(String nameProduct, Long idBrand, Long idProductType) {
 
-        List<ProductEntity> listProducts = null;
+        List<ProductWithoutDetailProducts> listProducts;
 
         if (idBrand != null && !this.brandRepository.existsById(idBrand))
             throw new RuntimeException("No existe la marca con codigo: " + idBrand);
@@ -109,36 +110,35 @@ public class ProductPersistenceMySql implements ProductPersistence {
 
         switch (bitsMaskSearch) {
             case 0:
-                listProducts = this.productRepository
-                        .findAll();
+                listProducts = this.productRepository.findAllBy(ProductWithoutDetailProducts.class);
                 break;
             case 1:
                 listProducts = this.productRepository
-                        .findAllByProductType_IdProductType(idProductType);
+                        .findAllByProductType_IdProductType(idProductType, ProductWithoutDetailProducts.class);
                 break;
             case 2:
                 listProducts = this.productRepository
-                        .findAllByBrand_IdBrand(idBrand);
+                        .findAllByBrand_IdBrand(idBrand, ProductWithoutDetailProducts.class);
                 break;
             case 3:
                 listProducts = this.productRepository
-                        .findAllByBrand_IdBrandAndProductType_IdProductType(idBrand, idProductType);
+                        .findAllByBrand_IdBrandAndProductType_IdProductType(idBrand, idProductType, ProductWithoutDetailProducts.class);
                 break;
             case 4:
                 listProducts = this.productRepository
-                        .findAllByNameProductContains(nameProduct);
+                        .findAllByNameProductContains(nameProduct, ProductWithoutDetailProducts.class);
                 break;
             case 5:
                 listProducts = this.productRepository
-                        .findAllByNameProductContainsAndProductType_IdProductType(nameProduct, idProductType);
+                        .findAllByNameProductContainsAndProductType_IdProductType(nameProduct, idProductType, ProductWithoutDetailProducts.class);
                 break;
             case 6:
                 listProducts = this.productRepository
-                        .findAllByNameProductContainsAndBrand_IdBrand(nameProduct, idBrand);
+                        .findAllByNameProductContainsAndBrand_IdBrand(nameProduct, idBrand, ProductWithoutDetailProducts.class);
                 break;
             case 7:
                 listProducts = this.productRepository
-                        .findAllByNameProductContainsAndBrand_IdBrandAndProductType_IdProductType(nameProduct, idBrand, idProductType);
+                        .findAllByNameProductContainsAndBrand_IdBrandAndProductType_IdProductType(nameProduct, idBrand, idProductType, ProductWithoutDetailProducts.class);
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + bitsMaskSearch +
@@ -146,6 +146,6 @@ public class ProductPersistenceMySql implements ProductPersistence {
         }
 
         return listProducts.stream()
-                .map(ProductEntity::toProduct);
+                .map(ProductWithoutDetailProducts::toProduct);
     }
 }

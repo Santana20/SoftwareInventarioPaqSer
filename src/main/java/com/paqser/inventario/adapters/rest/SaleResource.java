@@ -1,6 +1,5 @@
 package com.paqser.inventario.adapters.rest;
 
-import com.paqser.inventario.adapters.utils.DTOClass.SalePDF;
 import com.paqser.inventario.adapters.utils.SalePDFExporter;
 import com.paqser.inventario.domain.models.Sale;
 import com.paqser.inventario.domain.services.SaleService;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletResponse;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.stream.Stream;
@@ -47,7 +45,7 @@ public class SaleResource {
     }
     @GetMapping(SaleResource.EXPORTPDF)
     public void exportSalePdf(HttpServletResponse response,
-                              @RequestParam(value = "day", required = false) String day)
+                              @RequestParam(value = "day") String day)
     {
         try
         {
@@ -59,15 +57,15 @@ public class SaleResource {
             String headerValue = "attachment; filename = sales_" + currentDateTime + ".pdf";
             response.setHeader(headerKey, headerValue);
             */
-            Stream<SalePDF> listSalesPDF = null;
+            Stream<Sale> listSales;
             if (day != null) {
                 Date dateIni = new SimpleDateFormat("yyyy-MM-dd").parse(day);
                 Date dateFin = new Date(dateIni.getYear(), dateIni.getMonth(), dateIni.getDate(), 23, 59, 59);
-                listSalesPDF = this.saleService.listSalesByDatePDF(dateIni, dateFin);
+                listSales = this.saleService.listSalesByDate(dateIni, dateFin);
             }
-            else listSalesPDF = this.saleService.listSalesPDF();
-            SalePDFExporter exporter = new SalePDFExporter(listSalesPDF);
+            else listSales = this.saleService.listSales();
 
+            SalePDFExporter exporter = new SalePDFExporter(listSales);
 
             exporter.export(response);
         }

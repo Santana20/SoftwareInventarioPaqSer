@@ -3,12 +3,14 @@ package com.paqser.inventario.domain.models;
 import java.math.BigDecimal;
 
 public class DetailProduct {
+
     private Long idDetailProduct;
     private String netContent;
     private BigDecimal stock;
     private String saleUnit;
     private BigDecimal salePrice;
-    private String idProduct;
+
+    private Product product;
 
     public Long getIdDetailProduct() {
         return idDetailProduct;
@@ -50,12 +52,18 @@ public class DetailProduct {
         this.salePrice = salePrice;
     }
 
-    public String getIdProduct() {
-        return idProduct;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setIdProduct(String idProduct) {
-        this.idProduct = idProduct;
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public String getIdProduct()
+    {
+        if (this.product == null) return null;
+        return this.product.getIdProduct();
     }
 
     @Override
@@ -66,7 +74,6 @@ public class DetailProduct {
                 ", stock=" + stock +
                 ", saleUnit='" + saleUnit + '\'' +
                 ", salePrice=" + salePrice +
-                ", idProduct='" + idProduct + '\'' +
                 '}';
     }
 }

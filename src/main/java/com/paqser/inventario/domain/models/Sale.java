@@ -9,8 +9,8 @@ public class Sale {
     private Long idSale;
     private String nameClient;
     private Date dateSale;
-    private List<DetailSale> detailSaleList;
     private BigDecimal total;
+    private List<DetailSale> detailSaleList;
 
     public Sale() {
         // empty for framework

@@ -21,21 +21,15 @@ public class DetailProductEntity {
 
     @ManyToOne
     @JoinColumn(name = "idProduct")
-    private ProductEntity product;
+    private ProductEntity productEntity;
 
     public DetailProductEntity() {
         // empty for framework
     }
 
-    public DetailProductEntity(DetailProduct detailProduct, ProductEntity product) {
+    public DetailProductEntity(DetailProduct detailProduct, ProductEntity productEntity) {
         this.fromDetailProduct(detailProduct);
-        this.product = product;
-    }
-
-    public DetailProductEntity(Long idDetailProduct, BigDecimal stock, BigDecimal salePrice) {
-        this.idDetailProduct = idDetailProduct;
-        this.stock = stock;
-        this.salePrice = salePrice;
+        this.productEntity = productEntity;
     }
 
     public Long getIdDetailProduct() {
@@ -78,12 +72,12 @@ public class DetailProductEntity {
         this.salePrice = salePrice;
     }
 
-    public ProductEntity getProduct() {
-        return product;
+    public ProductEntity getProductEntity() {
+        return productEntity;
     }
 
-    public void setProduct(ProductEntity product) {
-        this.product = product;
+    public void setProductEntity(ProductEntity product) {
+        this.productEntity = product;
     }
 
     public void fromDetailProduct(DetailProduct detailProduct) {
@@ -93,7 +87,17 @@ public class DetailProductEntity {
     public DetailProduct toDetailProduct() {
         DetailProduct detailProduct = new DetailProduct();
         BeanUtils.copyProperties(this, detailProduct);
-        detailProduct.setIdProduct(this.product.getIdProduct());
+
+        detailProduct.setProduct(this.productEntity.toProductForDetailProductConstruct());
+
+        return detailProduct;
+    }
+
+    public DetailProduct toDetailProductForProductConstruct()
+    {
+        DetailProduct detailProduct = new DetailProduct();
+        BeanUtils.copyProperties(this, detailProduct);
+
         return detailProduct;
     }
 

@@ -7,8 +7,8 @@ public class DetailSale {
     private Long idDetailSale;
     private BigDecimal saleCount;
     private BigDecimal subTotal;
-    private Long idDetailProduct;
-    private Long idSale;
+    private DetailProduct detailProduct;
+    private Sale sale;
 
     public DetailSale() {
         // empty for framework
@@ -38,20 +38,26 @@ public class DetailSale {
         this.subTotal = subTotal;
     }
 
-    public Long getIdDetailProduct() {
-        return idDetailProduct;
+    public DetailProduct getDetailProduct() {
+        return detailProduct;
     }
 
-    public void setIdDetailProduct(Long idDetailProduct) {
-        this.idDetailProduct = idDetailProduct;
+    public void setDetailProduct(DetailProduct detailProduct) {
+        this.detailProduct = detailProduct;
     }
 
-    public Long getIdSale() {
-        return idSale;
+    public Sale getSale() {
+        return sale;
     }
 
-    public void setIdSale(Long idSale) {
-        this.idSale = idSale;
+    public void setSale(Sale sale) {
+        this.sale = sale;
+    }
+
+    public Long getIdDetailProduct()
+    {
+        if (this.detailProduct == null) return null;
+        return this.detailProduct.getIdDetailProduct();
     }
 
     @Override
@@ -60,8 +66,6 @@ public class DetailSale {
                 "idDetailSale=" + idDetailSale +
                 ", saleCount=" + saleCount +
                 ", subTotal=" + subTotal +
-                ", idDetailProduct=" + idDetailProduct +
-                ", idSale=" + idSale +
                 '}';
     }
 }

@@ -24,10 +24,10 @@ public class DetailProductResource {
     }
 
     @PostMapping
-    public DetailProduct createDetailProduct(@RequestBody DetailProduct detailProduct) {
-        DetailProduct detailProduct1;
+    public DetailProduct createDetailProduct(@RequestBody DetailProduct paramDetailProduct) {
+        DetailProduct detailProduct;
         try {
-            detailProduct = this.detailProductService.createDetailProduct(detailProduct);
+            detailProduct = this.detailProductService.createDetailProduct(paramDetailProduct);
         }
         catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());

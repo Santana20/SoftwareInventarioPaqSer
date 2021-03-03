@@ -9,14 +9,12 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import com.paqser.inventario.adapters.utils.DTOClass.DetailSalePDF;
 import com.paqser.inventario.adapters.utils.DTOClass.SalePDF;
-import com.paqser.inventario.domain.models.DetailSale;
 import com.paqser.inventario.domain.models.Sale;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -24,8 +22,8 @@ public class SalePDFExporter {
 
     private Stream<SalePDF> listSales;
 
-    public SalePDFExporter(Stream<SalePDF> listSales) {
-        this.listSales = listSales;
+    public SalePDFExporter(Stream<Sale> listSales) {
+        this.listSales = listSales.map(SalePDF::new);
     }
 
     public void export(HttpServletResponse response) throws IOException {

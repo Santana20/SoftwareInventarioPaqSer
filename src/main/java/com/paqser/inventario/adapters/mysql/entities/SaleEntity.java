@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "Sale")
@@ -46,11 +45,14 @@ public class SaleEntity {
     public Sale toSale() {
         Sale sale = new Sale();
         BeanUtils.copyProperties(this, sale);
-        List<DetailSale> detailSaleList = this.detailSaleEntityList.stream()
-                .map(detailSaleEntity ->
-                   detailSaleEntity.toDetailSale()
-                ).collect(Collectors.toList());
-        sale.setDetailSaleList(detailSaleList);
+        if (this.detailSaleEntityList != null && this.detailSaleEntityList.size() > 0) {
+            List<DetailSale> detailSaleList = new ArrayList<>();
+            for (DetailSaleEntity entity : this.detailSaleEntityList) {
+                DetailSale toDetailSale = entity.toDetailSaleForSaleConstruct();
+                detailSaleList.add(toDetailSale);
+            }
+            sale.setDetailSaleList(detailSaleList);
+        }
         return sale;
     }
 

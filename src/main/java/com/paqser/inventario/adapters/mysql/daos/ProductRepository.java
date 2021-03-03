@@ -9,18 +9,20 @@ public interface ProductRepository extends JpaRepository<ProductEntity, String> 
 
     ProductEntity findByIdProduct(String idProduct);
 
-    List<ProductEntity> findAllByProductType_IdProductType(Long idProductType);
+    <T> List<T> findAllBy(Class<T> type);
 
-    List<ProductEntity> findAllByBrand_IdBrand(Long idBrand);
+    <T> List<T> findAllByProductType_IdProductType(Long idProductType, Class<T> type);
 
-    List<ProductEntity> findAllByBrand_IdBrandAndProductType_IdProductType(Long idBrand, Long idProductType);
+    <T> List<T> findAllByBrand_IdBrand(Long idBrand, Class<T> type);
 
-    List<ProductEntity> findAllByNameProductContains(String nameProduct);
+    <T> List<T> findAllByBrand_IdBrandAndProductType_IdProductType(Long idBrand, Long idProductType, Class<T> type);
 
-    List<ProductEntity> findAllByNameProductContainsAndProductType_IdProductType(String nameProduct, Long idProductType);
+    <T> List<T> findAllByNameProductContains(String nameProduct, Class<T> type);
 
-    List<ProductEntity> findAllByNameProductContainsAndBrand_IdBrand(String nameProduct, Long idBrand);
+    <T> List<T> findAllByNameProductContainsAndProductType_IdProductType(String nameProduct, Long idProductType, Class<T> type);
 
-    List<ProductEntity> findAllByNameProductContainsAndBrand_IdBrandAndProductType_IdProductType(String nameProduct, Long idBrand, Long idProductType);
+    <T> List<T> findAllByNameProductContainsAndBrand_IdBrand(String nameProduct, Long idBrand, Class<T> type);
+
+    <T> List<T> findAllByNameProductContainsAndBrand_IdBrandAndProductType_IdProductType(String nameProduct, Long idBrand, Long idProductType, Class<T> type);
 
 }

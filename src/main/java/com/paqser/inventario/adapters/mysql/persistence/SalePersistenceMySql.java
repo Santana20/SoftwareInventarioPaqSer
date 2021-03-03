@@ -1,19 +1,17 @@
 package com.paqser.inventario.adapters.mysql.persistence;
 
+import com.paqser.inventario.adapters.mysql.DTOClass.DetailProductSimple;
 import com.paqser.inventario.adapters.mysql.daos.DetailProductRepository;
 import com.paqser.inventario.adapters.mysql.daos.DetailSaleRepository;
 import com.paqser.inventario.adapters.mysql.daos.SaleRepository;
-import com.paqser.inventario.adapters.mysql.entities.DetailProductEntity;
 import com.paqser.inventario.adapters.mysql.entities.DetailSaleEntity;
 import com.paqser.inventario.adapters.mysql.entities.SaleEntity;
-import com.paqser.inventario.adapters.utils.DTOClass.SalePDF;
-import com.paqser.inventario.domain.models.Sale;
 import com.paqser.inventario.domain.models.DetailSale;
+import com.paqser.inventario.domain.models.Sale;
 import com.paqser.inventario.domain.persistencePorts.SalePersistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -52,15 +50,17 @@ public class SalePersistenceMySql implements SalePersistence {
 
         for (DetailSale detailSale : sale.getDetailSaleList()) {
 
-            DetailProductEntity detailProductEntity = this.detailProductRepository
-                    .findByIdDetailProductSimple(detailSale.getIdDetailProduct());
+            DetailProductSimple detailProductSimple = this.detailProductRepository
+                    .findByIdDetailProduct(detailSale.getIdDetailProduct(), DetailProductSimple.class);
 
-            if (validateDetailSale(i, detailSale, detailProductEntity)) {
+            if (validateDetailSale(i, detailSale, detailProductSimple)) {
 
-                detailSaleEntities.add(new DetailSaleEntity(detailSale, detailProductEntity, saleEntity));
-                this.detailProductRepository.updateStockById(detailProductEntity.getIdDetailProduct(),
-                        detailProductEntity.getStock().subtract(detailSale.getSaleCount()));
-                total = total.add(sale.getDetailSaleList().get(i).getSubTotal());
+                detailSaleEntities.add(new DetailSaleEntity(detailSale, detailProductSimple.toDetailProductEntity(), saleEntity));
+                // update stock of current detailProduct.
+                this.detailProductRepository.updateStockById(detailProductSimple.getIdDetailProduct(),
+                        detailProductSimple.getStock().subtract(detailSale.getSaleCount()));
+
+                total = total.add(detailSale.getSubTotal());
                 i += 1;
 
             }
@@ -91,32 +91,19 @@ public class SalePersistenceMySql implements SalePersistence {
                 .map(SaleEntity::toSale);
     }
 
-    @Override
-    public Stream<SalePDF> listSalesPDF() {
-        return this.saleRepository.findAll()
-                .stream().map(SalePDF::new);
-    }
-
-    @Override
-    public Stream<SalePDF> listSalesByDatePDF(Date ini, Date fin) {
-        return this.saleRepository
-                .findAllByDateSaleBetween(ini, fin).stream()
-                .map(SalePDF::new);
-    }
-
     private boolean validateDetailSale(int index, DetailSale detailSale,
-                                                   DetailProductEntity detailProductEntity) {
+                                                   DetailProductSimple detailProductSimple) {
 
-        if (detailProductEntity == null)
-            throw new RuntimeException("No existe el detalle de producto con codigo: " + detailSale.getIdDetailProduct());
+        if (detailProductSimple == null)
+            throw new RuntimeException("No existe el detalle de producto con codigo: ".concat(String.valueOf(detailSale.getIdDetailProduct())));
 
-        if (detailSale.getSaleCount().compareTo(detailProductEntity.getStock()) > 0)
+        if (detailSale.getSaleCount().compareTo(detailProductSimple.getStock()) > 0)
             throw new RuntimeException("El stock es insuficiente para realizar la venta.\n" +
                     "indice del detalle de venta: " + index + "\n" +
                     "Stock pedido: " + detailSale.getSaleCount() + "\n" +
-                    "Stock disponible: " + detailProductEntity.getStock());
+                    "Stock disponible: " + detailProductSimple.getStock());
 
-        BigDecimal subtotal = detailProductEntity.getSalePrice()
+        BigDecimal subtotal = detailProductSimple.getSalePrice()
                 .multiply(detailSale.getSaleCount());
 
         if (!detailSale.getSubTotal().equals(subtotal))

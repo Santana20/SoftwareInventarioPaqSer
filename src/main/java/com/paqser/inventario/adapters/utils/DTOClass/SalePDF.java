@@ -1,12 +1,13 @@
 package com.paqser.inventario.adapters.utils.DTOClass;
 
-import com.paqser.inventario.adapters.mysql.entities.SaleEntity;
+import com.paqser.inventario.domain.models.DetailSale;
+import com.paqser.inventario.domain.models.Sale;
 import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class SalePDF {
     private Long idSale;
@@ -19,11 +20,15 @@ public class SalePDF {
     {
         // empty for framework
     }
-    public SalePDF(SaleEntity saleEntity)
+    public SalePDF(Sale sale)
     {
-        BeanUtils.copyProperties(saleEntity, this);
-        this.setDetailSalePDFList(saleEntity.getDetailSaleEntityList()
-        .stream().map(DetailSalePDF::new).collect(Collectors.toList()));
+        BeanUtils.copyProperties(sale, this);
+        List<DetailSalePDF> list = new ArrayList<>();
+        for (DetailSale detailSale : sale.getDetailSaleList()) {
+            DetailSalePDF detailSalePDF = new DetailSalePDF(detailSale);
+            list.add(detailSalePDF);
+        }
+        this.setDetailSalePDFList(list);
     }
     public Long getIdSale() {
         return idSale;
