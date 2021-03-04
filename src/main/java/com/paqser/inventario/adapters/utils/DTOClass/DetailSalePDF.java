@@ -3,70 +3,40 @@ package com.paqser.inventario.adapters.utils.DTOClass;
 import com.paqser.inventario.domain.models.DetailProduct;
 import com.paqser.inventario.domain.models.DetailSale;
 import com.paqser.inventario.domain.models.Product;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
-
+@Getter
+@Setter
+@ToString
 public class DetailSalePDF {
 
-    private String code;
+    private String idProduct;
     private String description;
     private BigDecimal unitPrice;
+    private String saleUnit;
     private BigDecimal count;
     private BigDecimal subTotal;
+    private Long idDetailProduct;
     public DetailSalePDF(DetailSale detailSale) {
-        this.subTotal = detailSale.getSubTotal();
+
         this.count = detailSale.getSaleCount();
+        this.subTotal = detailSale.getSubTotal();
         DetailProduct detailProduct = detailSale.getDetailProduct();
         if (detailProduct != null)
         {
+            this.idDetailProduct = detailProduct.getIdDetailProduct();
             this.unitPrice = detailProduct.getSalePrice();
+            this.saleUnit = detailProduct.getSaleUnit();
             Product product = detailProduct.getProduct();
             if (product != null)
             {
-                this.description = product.getNameProduct() + " / " +
-                                    detailProduct.getNetContent();
-                this.code = product.getIdProduct();
+                this.description = String.format("%s / %s", product.description(), detailProduct.getNetContent());
+                this.idProduct = product.getIdProduct();
             }
         }
-    }
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public BigDecimal getUnitPrice() {
-        return unitPrice;
-    }
-
-    public void setUnitPrice(BigDecimal unitPrice) {
-        this.unitPrice = unitPrice;
-    }
-
-    public BigDecimal getCount() {
-        return count;
-    }
-
-    public void setCount(BigDecimal count) {
-        this.count = count;
-    }
-
-    public BigDecimal getSubTotal() {
-        return subTotal;
-    }
-
-    public void setSubTotal(BigDecimal subTotal) {
-        this.subTotal = subTotal;
     }
 }

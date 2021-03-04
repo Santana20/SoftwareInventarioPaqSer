@@ -5,6 +5,8 @@ import com.paqser.inventario.domain.persistencePorts.DetailProductPersistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.stream.Stream;
+
 @Service
 public class DetailProductService {
 
@@ -17,5 +19,9 @@ public class DetailProductService {
 
     public DetailProduct createDetailProduct(DetailProduct detailProduct) {
         return this.detailProductPersistence.createDetailProduct(detailProduct);
+    }
+
+    public Stream<DetailProduct> findAllDetailProductByIdProduct(String idProduct) {
+        return this.detailProductPersistence.findAllDetailProductByIdProduct(idProduct);
     }
 }

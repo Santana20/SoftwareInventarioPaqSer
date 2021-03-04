@@ -1,5 +1,7 @@
 package com.paqser.inventario.domain.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 public class Product {
@@ -40,11 +42,13 @@ public class Product {
     public void setProductType(ProductType productType) {
         this.productType = productType;
     }
+    @JsonIgnore
     public Long getIdBrand()
     {
         if (this.brand == null) return null;
         return this.brand.getIdBrand();
     }
+    @JsonIgnore
     public Long getIdProductType()
     {
         if (this.productType == null) return null;
@@ -64,5 +68,12 @@ public class Product {
                 "idProduct='" + idProduct + '\'' +
                 ", nameProduct='" + nameProduct + '\'' +
                 '}';
+    }
+
+    public String description() {
+        return String.format("%s / %s / %s",
+                this.getNameProduct(),
+                this.getBrand().getNameBrand(),
+                this.getProductType().getNameProductType());
     }
 }

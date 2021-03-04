@@ -1,6 +1,7 @@
 package com.paqser.inventario.adapters.mysql.persistence;
 
-import com.paqser.inventario.adapters.mysql.DTOClass.DetailProductSimple;
+import com.paqser.inventario.adapters.mysql.projections.DetailProductSimple;
+import com.paqser.inventario.adapters.mysql.projections.SaleWithoutDetailSaleList;
 import com.paqser.inventario.adapters.mysql.daos.DetailProductRepository;
 import com.paqser.inventario.adapters.mysql.daos.DetailSaleRepository;
 import com.paqser.inventario.adapters.mysql.daos.SaleRepository;
@@ -79,16 +80,25 @@ public class SalePersistenceMySql implements SalePersistence {
     }
 
     @Override
-    public Stream<Sale> listSales() {
-        return this.saleRepository.findAll()
-                .stream().map(SaleEntity::toSale);
+    public Stream<Sale> listSales(boolean isPDF) {
+        if (isPDF) {
+            return this.saleRepository.findAllBy(SaleEntity.class)
+                    .stream().map(SaleEntity::toSale);
+        }
+        return this.saleRepository.findAllBy(SaleWithoutDetailSaleList.class)
+                .stream().map(SaleWithoutDetailSaleList::toSale);
     }
 
     @Override
-    public Stream<Sale> listSalesByDate(Date ini, Date fin) {
+    public Stream<Sale> listSalesByDate(Date ini, Date fin, boolean isPDF) {
+        if (isPDF) {
+            return this.saleRepository
+                    .findAllByDateSaleBetween(ini, fin, SaleEntity.class).stream()
+                    .map(SaleEntity::toSale);
+        }
         return this.saleRepository
-                .findAllByDateSaleBetween(ini, fin).stream()
-                .map(SaleEntity::toSale);
+                .findAllByDateSaleBetween(ini, fin, SaleWithoutDetailSaleList.class)
+                .stream().map(SaleWithoutDetailSaleList::toSale);
     }
 
     private boolean validateDetailSale(int index, DetailSale detailSale,

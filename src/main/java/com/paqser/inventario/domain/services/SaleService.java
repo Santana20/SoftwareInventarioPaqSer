@@ -22,14 +22,14 @@ public class SaleService {
         return this.salePersistence.registerSale(sale);
     }
 
-    public Stream<Sale> listSales()
+    public Stream<Sale> listSales(boolean isPDF)
     {
-        return this.salePersistence.listSales();
+        return this.salePersistence.listSales(isPDF);
     }
 
-    public Stream<Sale> listSalesByDate(Date ini, Date fin)
+    public Stream<Sale> listSalesByDate(Date ini, Date fin, boolean isPDF)
     {
-        return this.salePersistence.listSalesByDate(ini, fin);
+        return this.salePersistence.listSalesByDate(ini, fin, isPDF);
     }
 
 }

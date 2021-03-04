@@ -4,6 +4,7 @@ import com.paqser.inventario.adapters.mysql.daos.DetailProductRepository;
 import com.paqser.inventario.adapters.mysql.daos.ProductRepository;
 import com.paqser.inventario.adapters.mysql.entities.DetailProductEntity;
 import com.paqser.inventario.adapters.mysql.entities.ProductEntity;
+import com.paqser.inventario.adapters.mysql.projections.DetailProductWithoutForeignClass;
 import com.paqser.inventario.domain.models.DetailProduct;
 import com.paqser.inventario.domain.persistencePorts.DetailProductPersistence;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,9 @@ public class DetailProductPersistenceMySql implements DetailProductPersistence {
     }
 
     @Override
-    public Stream<DetailProduct> listDetailProductsByIdProduct(String idProduct) {
-        return null;
+    public Stream<DetailProduct> findAllDetailProductByIdProduct(String idProduct) {
+        return this.detailProductRepository
+                .findAllByProductEntity_IdProduct(idProduct, DetailProductWithoutForeignClass.class)
+                .stream().map(DetailProductWithoutForeignClass::toDetailProduct);
     }
 }

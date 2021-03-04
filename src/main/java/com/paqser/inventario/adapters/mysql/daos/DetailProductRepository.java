@@ -7,10 +7,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface DetailProductRepository extends JpaRepository<DetailProductEntity, Long> {
 
     <T> T findByIdDetailProduct(Long idDetailProduct, Class<T> type);
+
+    <T> List<T> findAllByProductEntity_IdProduct(String idProduct, Class<T> type);
 
     @Modifying
     @Query("update DetailProductEntity d set " +

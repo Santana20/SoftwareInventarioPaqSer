@@ -19,6 +19,7 @@ public class SaleResource {
 
     static final String SALE = "/api/sale";
     static final String EXPORTPDF = "/export";
+    static final String LISTSALES = "/list";
 
     private final SaleService saleService;
 
@@ -44,8 +45,7 @@ public class SaleResource {
         return sale;
     }
     @GetMapping(SaleResource.EXPORTPDF)
-    public void exportSalePdf(HttpServletResponse response,
-                              @RequestParam(value = "day") String day)
+    public void exportSalePdf(HttpServletResponse response, @RequestParam(value = "day") String day)
     {
         try
         {
@@ -59,11 +59,11 @@ public class SaleResource {
             */
             Stream<Sale> listSales;
             if (day != null) {
-                Date dateIni = new SimpleDateFormat("yyyy-MM-dd").parse(day);
+                Date dateIni = new SimpleDateFormat("dd-MM-yyyy").parse(day);
                 Date dateFin = new Date(dateIni.getYear(), dateIni.getMonth(), dateIni.getDate(), 23, 59, 59);
-                listSales = this.saleService.listSalesByDate(dateIni, dateFin);
+                listSales = this.saleService.listSalesByDate(dateIni, dateFin, true);
             }
-            else listSales = this.saleService.listSales();
+            else listSales = this.saleService.listSales(true);
 
             SalePDFExporter exporter = new SalePDFExporter(listSales);
 
@@ -73,5 +73,28 @@ public class SaleResource {
         {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
+    }
+    @GetMapping(SaleResource.LISTSALES)
+    public Stream<Sale> listSales(@RequestParam(value = "day", required = false) String day)
+    {
+        Stream<Sale> saleList;
+        try {
+            if(day!=null)
+            {
+                Date dateIni = new SimpleDateFormat("dd-MM-yyyy").parse(day);
+                Date dateFin = new Date(dateIni.getYear(), dateIni.getMonth(), dateIni.getDate(), 23, 59, 59);
+                saleList = this.saleService.listSalesByDate(dateIni, dateFin, false);
+            }
+            else
+            {
+                saleList = this.saleService.listSales(false);
+            }
+        }
+        catch (Exception e)
+        {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+
+        return saleList;
     }
 }

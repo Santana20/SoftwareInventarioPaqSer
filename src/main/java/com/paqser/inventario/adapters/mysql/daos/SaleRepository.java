@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface SaleRepository extends JpaRepository<SaleEntity, Long> {
 
-    List<SaleEntity> findAllByDateSaleBetween(Date ini, Date fin);
+    <T> List<T> findAllByDateSaleBetween(Date ini, Date fin, Class<T> type);
+
+    <T> List<T> findAllBy(Class<T> type);
 
 }

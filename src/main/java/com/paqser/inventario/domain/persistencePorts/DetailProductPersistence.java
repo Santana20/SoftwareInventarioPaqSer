@@ -14,6 +14,5 @@ public interface DetailProductPersistence {
 
     DetailProduct deleteDetailProductById(String idDetailProduct);
 
-    Stream<DetailProduct> listDetailProductsByIdProduct(String idProduct);
-
+    Stream<DetailProduct> findAllDetailProductByIdProduct(String idProduct);
 }

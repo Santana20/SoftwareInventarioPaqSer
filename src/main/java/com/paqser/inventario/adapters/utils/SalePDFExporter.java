@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 
 public class SalePDFExporter {
 
-    private Stream<SalePDF> listSales;
+    private final Stream<SalePDF> listSales;
 
     public SalePDFExporter(Stream<Sale> listSales) {
         this.listSales = listSales.map(SalePDF::new);
@@ -79,7 +79,7 @@ public class SalePDFExporter {
         if (detailSaleList == null) return;
         for (DetailSalePDF detailSalePDF : detailSaleList)
         {
-            table.addCell(detailSalePDF.getCode());
+            table.addCell(detailSalePDF.getIdProduct());
             table.addCell(detailSalePDF.getDescription());
             table.addCell(String.valueOf(detailSalePDF.getUnitPrice()));
             table.addCell(String.valueOf(detailSalePDF.getCount()));

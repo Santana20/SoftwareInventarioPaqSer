@@ -4,19 +4,19 @@ import com.paqser.inventario.domain.models.DetailProduct;
 import com.paqser.inventario.domain.services.DetailProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping(DetailProductResource.DETAILPRODUCTS)
 public class DetailProductResource {
 
     static final String DETAILPRODUCTS = "/api/detailProduct";
+    static final String FINDALLDPBYIDPRODUCT = "/listDP/{idProduct}";
 
-    private DetailProductService detailProductService;
+    private final DetailProductService detailProductService;
 
     @Autowired
     public DetailProductResource(DetailProductService detailProductService) {
@@ -34,5 +34,21 @@ public class DetailProductResource {
         }
 
         return detailProduct;
+    }
+
+    @GetMapping(DetailProductResource.FINDALLDPBYIDPRODUCT)
+    public Stream<DetailProduct> findAllDetailProductByIdProduct(@PathVariable("idProduct") String idProduct)
+    {
+        Stream<DetailProduct> detailProductStream;
+        try
+        {
+            detailProductStream = this.detailProductService.findAllDetailProductByIdProduct(idProduct);
+        }
+        catch (Exception e)
+        {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+
+        return detailProductStream;
     }
 }

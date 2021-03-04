@@ -1,12 +1,12 @@
 package com.paqser.inventario.adapters.mysql.persistence;
 
-import com.paqser.inventario.adapters.mysql.DTOClass.ProductWithoutDetailProducts;
 import com.paqser.inventario.adapters.mysql.daos.BrandRepository;
 import com.paqser.inventario.adapters.mysql.daos.ProductRepository;
 import com.paqser.inventario.adapters.mysql.daos.ProductTypeRepository;
 import com.paqser.inventario.adapters.mysql.entities.BrandEntity;
 import com.paqser.inventario.adapters.mysql.entities.ProductEntity;
 import com.paqser.inventario.adapters.mysql.entities.ProductTypeEntity;
+import com.paqser.inventario.adapters.mysql.projections.ProductWithoutDetailProducts;
 import com.paqser.inventario.domain.models.Product;
 import com.paqser.inventario.domain.persistencePorts.ProductPersistence;
 import org.springframework.beans.factory.annotation.Autowired;

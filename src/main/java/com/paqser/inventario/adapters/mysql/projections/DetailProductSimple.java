@@ -1,4 +1,4 @@
-package com.paqser.inventario.adapters.mysql.DTOClass;
+package com.paqser.inventario.adapters.mysql.projections;
 
 import com.paqser.inventario.adapters.mysql.entities.DetailProductEntity;
 import lombok.Value;

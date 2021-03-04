@@ -11,8 +11,8 @@ public interface SalePersistence {
 
     Sale registerSale(Sale sale);
 
-    Stream<Sale> listSales();
+    Stream<Sale> listSales(boolean isPDF);
 
-    Stream<Sale> listSalesByDate(Date ini, Date fin);
+    Stream<Sale> listSalesByDate(Date ini, Date fin, boolean isPDF);
 
 }
