@@ -1,6 +1,7 @@
 package com.paqser.inventario.adapters.mysql.persistence;
 
 import com.paqser.inventario.adapters.mysql.projections.DetailProductSimple;
+import com.paqser.inventario.adapters.mysql.projections.SaleWithoutCycles;
 import com.paqser.inventario.adapters.mysql.projections.SaleWithoutDetailSaleList;
 import com.paqser.inventario.adapters.mysql.daos.DetailProductRepository;
 import com.paqser.inventario.adapters.mysql.daos.DetailSaleRepository;
@@ -82,8 +83,8 @@ public class SalePersistenceMySql implements SalePersistence {
     @Override
     public Stream<Sale> listSales(boolean isPDF) {
         if (isPDF) {
-            return this.saleRepository.findAllBy(SaleEntity.class)
-                    .stream().map(SaleEntity::toSale);
+            return this.saleRepository.findAllBy(SaleWithoutCycles.class)
+                    .stream().map(SaleWithoutCycles::toSale);
         }
         return this.saleRepository.findAllBy(SaleWithoutDetailSaleList.class)
                 .stream().map(SaleWithoutDetailSaleList::toSale);
@@ -99,6 +100,13 @@ public class SalePersistenceMySql implements SalePersistence {
         return this.saleRepository
                 .findAllByDateSaleBetween(ini, fin, SaleWithoutDetailSaleList.class)
                 .stream().map(SaleWithoutDetailSaleList::toSale);
+    }
+
+    @Override
+    public Sale findSaleByIdSale(Long idSale) {
+
+        return this.saleRepository.findByIdSale(idSale, SaleWithoutCycles.class)
+                .toSale();
     }
 
     private boolean validateDetailSale(int index, DetailSale detailSale,

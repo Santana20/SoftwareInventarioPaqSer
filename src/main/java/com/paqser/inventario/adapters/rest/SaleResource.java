@@ -45,17 +45,32 @@ public class SaleResource {
         return sale;
     }
     @GetMapping(SaleResource.EXPORTPDF)
-    public void exportSalePdf(HttpServletResponse response, @RequestParam(value = "day") String day)
+    public void exportInPDFSale(HttpServletResponse response, @RequestParam(value = "idSale") Long idSale) {
+        try {
+            response.setContentType("application/pdf");
+            SalePDFExporter exporter = new SalePDFExporter();
+
+            Sale sale = this.saleService.findSaleByIdSale(idSale);
+
+            exporter.exportSale(response, sale);
+        }
+        catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @GetMapping(SaleResource.LISTSALES + SaleResource.EXPORTPDF)
+    public void exportInPDFListSalesByDate(HttpServletResponse response, @RequestParam(value = "day") String day)
     {
         try
         {
             response.setContentType("application/pdf");
             /*
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-            String currentDateTime = dateFormat.format(new Date());
-            String headerKey = "Content-Disposition";
-            String headerValue = "attachment; filename = sales_" + currentDateTime + ".pdf";
-            response.setHeader(headerKey, headerValue);
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+                String currentDateTime = dateFormat.format(new Date());
+                String headerKey = "Content-Disposition";
+                String headerValue = "attachment; filename = sales_" + currentDateTime + ".pdf";
+                response.setHeader(headerKey, headerValue);
             */
             Stream<Sale> listSales;
             if (day != null) {
@@ -65,9 +80,9 @@ public class SaleResource {
             }
             else listSales = this.saleService.listSales(true);
 
-            SalePDFExporter exporter = new SalePDFExporter(listSales);
+            SalePDFExporter exporter = new SalePDFExporter();
 
-            exporter.export(response);
+            exporter.exportListSales(response, listSales);
         }
         catch(Exception e)
         {

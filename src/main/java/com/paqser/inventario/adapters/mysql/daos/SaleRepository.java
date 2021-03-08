@@ -12,4 +12,6 @@ public interface SaleRepository extends JpaRepository<SaleEntity, Long> {
 
     <T> List<T> findAllBy(Class<T> type);
 
+    <T> T findByIdSale(Long idSale, Class<T> type);
+
 }

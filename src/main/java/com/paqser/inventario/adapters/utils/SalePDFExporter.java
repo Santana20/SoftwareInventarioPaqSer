@@ -8,7 +8,7 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import com.paqser.inventario.adapters.utils.DTOClass.DetailSalePDF;
-import com.paqser.inventario.adapters.utils.DTOClass.SalePDF;
+import com.paqser.inventario.domain.models.DetailSale;
 import com.paqser.inventario.domain.models.Sale;
 
 import javax.servlet.http.HttpServletResponse;
@@ -20,14 +20,23 @@ import java.util.stream.Stream;
 
 public class SalePDFExporter {
 
-    private final Stream<SalePDF> listSales;
+    private final DateFormat dateFormat;
 
-    public SalePDFExporter(Stream<Sale> listSales) {
-        this.listSales = listSales.map(SalePDF::new);
+    public SalePDFExporter() {
+        this.dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     }
+    public void exportSale(HttpServletResponse response, Sale sale) throws IOException {
 
-    public void export(HttpServletResponse response) throws IOException {
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Document documentPDF = new Document(PageSize.A4);
+        PdfWriter.getInstance(documentPDF, response.getOutputStream());
+
+        documentPDF.open();
+
+        writeSale(documentPDF, sale);
+
+        documentPDF.close();
+    }
+    public void exportListSales(HttpServletResponse response, Stream<Sale> listSales) throws IOException {
 
         Document documentPDF = new Document(PageSize.A4);
         PdfWriter.getInstance(documentPDF, response.getOutputStream());
@@ -35,27 +44,13 @@ public class SalePDFExporter {
         documentPDF.open();
 
         documentPDF.add(new Paragraph("Lista de todas las ventas"));
-        if (listSales != null)
-        {
-            listSales.forEach(salePDF -> {
-                documentPDF.add(new Paragraph("Venta: #" + salePDF.getIdSale().toString()));
-                documentPDF.add(new Paragraph("Dia: " + dateFormat.format(salePDF.getDateSale())));
-                documentPDF.add(new Paragraph("Total: " + salePDF.getTotal().toString()));
-
-                PdfPTable table = new PdfPTable(5);
-                table.setWidthPercentage(100);
-                table.setSpacingBefore(10);
-
-                writeTableHeader(table);
-                writeTableData(table, salePDF.getDetailSalePDFList());
-                documentPDF.add(table);
-            });
+        if (listSales != null) {
+            listSales.forEach(sale -> writeSale(documentPDF, sale));
         }
         documentPDF.close();
-    }
 
-    private void writeTableHeader(PdfPTable table)
-    {
+    }
+    private void writeTableHeader(PdfPTable table) {
         PdfPCell cell = new PdfPCell();
         cell.setPadding(5);
 
@@ -74,11 +69,24 @@ public class SalePDFExporter {
         cell.setPhrase(new Phrase("SubTotal"));
         table.addCell(cell);
     }
-    private void writeTableData(PdfPTable table, List<DetailSalePDF> detailSaleList)
-    {
+    private void writeSale(Document documentPDF, Sale sale) {
+        documentPDF.add(new Paragraph("Venta: #" + sale.getIdSale().toString()));
+        documentPDF.add(new Paragraph("Dia: " + dateFormat.format(sale.getDateSale())));
+        documentPDF.add(new Paragraph("Total: " + sale.getTotal().toString()));
+
+        PdfPTable table = new PdfPTable(5);
+        table.setWidthPercentage(100);
+        table.setSpacingBefore(10);
+
+        writeTableHeader(table);
+        writeTableData(table, sale.getDetailSaleList());
+        documentPDF.add(table);
+    }
+    private void writeTableData(PdfPTable table, List<DetailSale> detailSaleList) {
         if (detailSaleList == null) return;
-        for (DetailSalePDF detailSalePDF : detailSaleList)
-        {
+        for (DetailSale detailSale : detailSaleList) {
+            DetailSalePDF detailSalePDF = new DetailSalePDF(detailSale);
+
             table.addCell(detailSalePDF.getIdProduct());
             table.addCell(detailSalePDF.getDescription());
             table.addCell(String.valueOf(detailSalePDF.getUnitPrice()));

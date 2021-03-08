@@ -15,4 +15,6 @@ public interface SalePersistence {
 
     Stream<Sale> listSalesByDate(Date ini, Date fin, boolean isPDF);
 
+    Sale findSaleByIdSale(Long idSale);
+
 }

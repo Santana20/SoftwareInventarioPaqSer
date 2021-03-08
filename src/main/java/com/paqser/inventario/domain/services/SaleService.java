@@ -22,6 +22,10 @@ public class SaleService {
         return this.salePersistence.registerSale(sale);
     }
 
+    public Sale findSaleByIdSale(Long idSale) {
+        return this.salePersistence.findSaleByIdSale(idSale);
+    }
+
     public Stream<Sale> listSales(boolean isPDF)
     {
         return this.salePersistence.listSales(isPDF);
