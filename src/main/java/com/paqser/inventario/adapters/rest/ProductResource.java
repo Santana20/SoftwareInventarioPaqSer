@@ -17,7 +17,7 @@ public class ProductResource {
     static final String SEARCH = "/search";
     static final String IDPRODUCT = "/{idProduct}";
 
-    private ProductService productService;
+    private final ProductService productService;
 
     @Autowired
     public ProductResource(ProductService productService) {
@@ -55,6 +55,8 @@ public class ProductResource {
 
     @GetMapping(SEARCH + IDPRODUCT)
     public Product getProductById(@PathVariable(value = "idProduct") String idProduct) {
+        //Todo
+
         Product product;
         try {
             product = this.productService.getProductById(idProduct);

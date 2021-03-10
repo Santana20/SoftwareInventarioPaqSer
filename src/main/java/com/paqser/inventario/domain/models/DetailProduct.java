@@ -60,10 +60,10 @@ public class DetailProduct {
         this.product = product;
     }
 
-    public String getIdProduct()
+    public Long getIdProduct()
     {
         if (this.product == null) return null;
-        return this.product.getIdProduct();
+        return this.product.getId();
     }
 
     @Override

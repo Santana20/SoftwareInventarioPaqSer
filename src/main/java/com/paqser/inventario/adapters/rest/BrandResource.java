@@ -15,7 +15,7 @@ public class BrandResource {
 
     static final String BRANDS = "/api/brands";
 
-    private BrandService brandService;
+    private final BrandService brandService;
 
     @Autowired
     public BrandResource(BrandService brandService) {

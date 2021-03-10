@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 @Repository("BrandPersisitence")
 public class BrandPersisitenceMySql implements BrandPersistence {
 
-    private BrandRepository brandRepository;
+    private final BrandRepository brandRepository;
 
     @Autowired
     public BrandPersisitenceMySql(BrandRepository brandRepository) {

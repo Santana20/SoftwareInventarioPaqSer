@@ -19,11 +19,11 @@ import java.util.stream.Stream;
 @Repository("ProductPersistence")
 public class ProductPersistenceMySql implements ProductPersistence {
 
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
-    private BrandRepository brandRepository;
+    private final BrandRepository brandRepository;
 
-    private ProductTypeRepository productTypeRepository;
+    private final ProductTypeRepository productTypeRepository;
 
     @Autowired
     public ProductPersistenceMySql(ProductRepository productRepository, BrandRepository brandRepository,
@@ -33,16 +33,13 @@ public class ProductPersistenceMySql implements ProductPersistence {
         this.productTypeRepository = productTypeRepository;
     }
 
-    public boolean existIdProduct(String idProduct) {
-        return this.productRepository.existsById(idProduct);
-    }
-
 
     @Override
-    public Product createProduct(Product newProduct) throws Exception {
+    public Product createProduct(Product newProduct) {
 
-        if (existIdProduct(newProduct.getIdProduct()))
-            throw new Exception("Producto con codigo <" + newProduct.getIdProduct() + "> ya fue registrado");
+        if (this.productRepository.existsByCodProductAndBrand_IdBrandAndProductType_IdProductTypeAndNameProduct(newProduct.getCodProduct(),
+                newProduct.getIdBrand(), newProduct.getIdProductType(), newProduct.getNameProduct()))
+            throw new RuntimeException("Ya existe un producto con dichos atributos");
 
         if (newProduct.getIdBrand() == null)
             throw new RuntimeException("Debe ingresar la marca del producto.");
@@ -77,13 +74,14 @@ public class ProductPersistenceMySql implements ProductPersistence {
 
     @Override
     public Product findByIdProduct(String idProduct) {
+        /* Todo
         ProductEntity product = this.productRepository.findByIdProduct(idProduct);
 
         if (product == null) {
             throw new RuntimeException("No existe producto con codigo < " + idProduct + ">");
         }
-
-        return product.toProduct();
+        */
+        return null;
     }
 
     @Override

@@ -15,7 +15,7 @@ public class ProductTypeResource {
 
     static final String PRODUCTTYPES = "/api/productTypes";
 
-    private ProductTypeService productTypeService;
+    private final ProductTypeService productTypeService;
 
     @Autowired
     public ProductTypeResource(ProductTypeService productTypeService) {

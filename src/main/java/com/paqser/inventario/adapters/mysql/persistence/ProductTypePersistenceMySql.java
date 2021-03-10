@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 @Repository("ProductTypePersistence")
 public class ProductTypePersistenceMySql implements ProductTypePersistence {
 
-    private ProductTypeRepository productTypeRepository;
+    private final ProductTypeRepository productTypeRepository;
 
     @Autowired
     public ProductTypePersistenceMySql(ProductTypeRepository productTypeRepository) {

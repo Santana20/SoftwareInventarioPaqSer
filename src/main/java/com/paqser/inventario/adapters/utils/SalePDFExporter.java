@@ -87,7 +87,7 @@ public class SalePDFExporter {
         for (DetailSale detailSale : detailSaleList) {
             DetailSalePDF detailSalePDF = new DetailSalePDF(detailSale);
 
-            table.addCell(detailSalePDF.getIdProduct());
+            table.addCell(detailSalePDF.getCodProduct());
             table.addCell(detailSalePDF.getDescription());
             table.addCell(String.valueOf(detailSalePDF.getUnitPrice()));
             table.addCell(String.valueOf(detailSalePDF.getCount()));

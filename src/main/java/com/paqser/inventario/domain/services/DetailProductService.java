@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 @Service
 public class DetailProductService {
 
-    private DetailProductPersistence detailProductPersistence;
+    private final DetailProductPersistence detailProductPersistence;
 
     @Autowired
     public DetailProductService(DetailProductPersistence detailProductPersistence) {
@@ -21,7 +21,7 @@ public class DetailProductService {
         return this.detailProductPersistence.createDetailProduct(detailProduct);
     }
 
-    public Stream<DetailProduct> findAllDetailProductByIdProduct(String idProduct) {
+    public Stream<DetailProduct> findAllDetailProductByIdProduct(Long idProduct) {
         return this.detailProductPersistence.findAllDetailProductByIdProduct(idProduct);
     }
 }

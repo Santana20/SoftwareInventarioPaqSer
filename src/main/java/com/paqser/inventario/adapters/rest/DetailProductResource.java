@@ -37,7 +37,7 @@ public class DetailProductResource {
     }
 
     @GetMapping(DetailProductResource.FINDALLDPBYIDPRODUCT)
-    public Stream<DetailProduct> findAllDetailProductByIdProduct(@PathVariable("idProduct") String idProduct)
+    public Stream<DetailProduct> findAllDetailProductByIdProduct(@PathVariable("idProduct") Long idProduct)
     {
         Stream<DetailProduct> detailProductStream;
         try

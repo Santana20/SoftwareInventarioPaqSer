@@ -13,7 +13,7 @@ public interface DetailProductRepository extends JpaRepository<DetailProductEnti
 
     <T> T findByIdDetailProduct(Long idDetailProduct, Class<T> type);
 
-    <T> List<T> findAllByProductEntity_IdProduct(String idProduct, Class<T> type);
+    <T> List<T> findAllByProductEntity_Id(Long id, Class<T> type);
 
     @Modifying
     @Query("update DetailProductEntity d set " +

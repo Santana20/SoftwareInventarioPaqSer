@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 @Service
 public class SaleService {
 
-    private SalePersistence salePersistence;
+    private final SalePersistence salePersistence;
 
     @Autowired
     public SaleService(SalePersistence salePersistence) {

@@ -5,9 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ProductRepository extends JpaRepository<ProductEntity, String> {
-
-    ProductEntity findByIdProduct(String idProduct);
+public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
     <T> List<T> findAllBy(Class<T> type);
 
@@ -24,5 +22,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity, String> 
     <T> List<T> findAllByNameProductContainsAndBrand_IdBrand(String nameProduct, Long idBrand, Class<T> type);
 
     <T> List<T> findAllByNameProductContainsAndBrand_IdBrandAndProductType_IdProductType(String nameProduct, Long idBrand, Long idProductType, Class<T> type);
+
+    boolean existsByCodProductAndBrand_IdBrandAndProductType_IdProductTypeAndNameProduct(String codProduct, Long idBrand, Long idProductType, String nameProduct);
 
 }

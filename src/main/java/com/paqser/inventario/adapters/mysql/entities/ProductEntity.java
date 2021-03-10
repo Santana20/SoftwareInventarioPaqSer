@@ -2,6 +2,10 @@ package com.paqser.inventario.adapters.mysql.entities;
 
 import com.paqser.inventario.domain.models.DetailProduct;
 import com.paqser.inventario.domain.models.Product;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
@@ -11,10 +15,19 @@ import java.util.Objects;
 
 @Entity
 @Table(name="Product")
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
 public class ProductEntity {
     @Id
-    private String idProduct;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
+    @Column(length = 50, nullable = false)
+    private String codProduct;
+
+    @Column(length = 100, nullable = false)
     private String nameProduct;
 
     @ManyToOne
@@ -35,46 +48,6 @@ public class ProductEntity {
     }
     public ProductEntity(Product product) {
         BeanUtils.copyProperties(product, this);
-    }
-
-    public String getIdProduct() {
-        return idProduct;
-    }
-
-    public void setIdProduct(String idProduct) {
-        this.idProduct = idProduct;
-    }
-
-    public String getNameProduct() {
-        return nameProduct;
-    }
-
-    public void setNameProduct(String nameProduct) {
-        this.nameProduct = nameProduct;
-    }
-
-    public BrandEntity getBrand() {
-        return brand;
-    }
-
-    public void setBrand(BrandEntity brand) {
-        this.brand = brand;
-    }
-
-    public ProductTypeEntity getProductType() {
-        return productType;
-    }
-
-    public void setProductType(ProductTypeEntity productType) {
-        this.productType = productType;
-    }
-
-    public List<DetailProductEntity> getDetailProductEntityList() {
-        return detailProductEntityList;
-    }
-
-    public void setDetailProductEntityList(List<DetailProductEntity> detailProductEntityList) {
-        this.detailProductEntityList = detailProductEntityList;
     }
 
     public void fromProduct(Product product) {
@@ -112,19 +85,4 @@ public class ProductEntity {
 
         return product;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ProductEntity that = (ProductEntity) o;
-        return idProduct.equals(that.idProduct) &&
-                Objects.equals(nameProduct, that.nameProduct);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(idProduct);
-    }
-
 }

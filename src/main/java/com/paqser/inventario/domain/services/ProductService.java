@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 @Service
 public class ProductService {
 
-    private ProductPersistence productPersistence;
+    private final ProductPersistence productPersistence;
 
     @Autowired
     public ProductService(ProductPersistence productPersistence) {
@@ -22,12 +22,7 @@ public class ProductService {
     }
 
     public void updateProduct(Product updatedProduct) {
-        Product product = this.productPersistence.findByIdProduct(updatedProduct.getIdProduct());
-
-        if (product != null) {
-            if (updatedProduct.getNameProduct() != null) product.setNameProduct(updatedProduct.getNameProduct());
-            this.productPersistence.updateProduct(product);
-        }
+        //Todo
     }
 
     public Stream<Product> listAllProducts() {
@@ -39,6 +34,7 @@ public class ProductService {
     }
 
     public Product getProductById(String idProduct) {
-        return this.productPersistence.findByIdProduct(idProduct);
+        // Todo
+        return null;
     }
 }

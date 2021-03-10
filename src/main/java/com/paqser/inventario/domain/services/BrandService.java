@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 @Service
 public class BrandService {
 
-    private BrandPersistence brandPersistence;
+    private final BrandPersistence brandPersistence;
 
     @Autowired
     public BrandService(BrandPersistence brandPersistence) {

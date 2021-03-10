@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 @Service
 public class ProductTypeService {
 
-    private ProductTypePersistence productTypePersistence;
+    private final ProductTypePersistence productTypePersistence;
 
     @Autowired
     public ProductTypeService(ProductTypePersistence productTypePersistence) {

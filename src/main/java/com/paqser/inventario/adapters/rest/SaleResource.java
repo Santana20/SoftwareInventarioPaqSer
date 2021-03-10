@@ -65,13 +65,6 @@ public class SaleResource {
         try
         {
             response.setContentType("application/pdf");
-            /*
-                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-                String currentDateTime = dateFormat.format(new Date());
-                String headerKey = "Content-Disposition";
-                String headerValue = "attachment; filename = sales_" + currentDateTime + ".pdf";
-                response.setHeader(headerKey, headerValue);
-            */
             Stream<Sale> listSales;
             if (day != null) {
                 Date dateIni = new SimpleDateFormat("dd-MM-yyyy").parse(day);

@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 @Service
 public class DetailSaleService {
 
-    private DetailSalePersistence detailSalePersistence;
+    private final DetailSalePersistence detailSalePersistence;
 
     @Autowired
     public DetailSaleService(DetailSalePersistence detailSalePersistence) {

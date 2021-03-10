@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @ToString
 public class DetailSalePDF {
 
-    private String idProduct;
+    private String codProduct;
     private String description;
     private BigDecimal unitPrice;
     private String saleUnit;
@@ -34,7 +34,7 @@ public class DetailSalePDF {
             if (product != null)
             {
                 this.description = String.format("%s / %s", product.description(), detailProduct.getNetContent());
-                this.idProduct = product.getIdProduct();
+                this.codProduct = product.getCodProduct();
             }
         }
 

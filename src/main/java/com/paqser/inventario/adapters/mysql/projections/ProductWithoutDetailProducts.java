@@ -7,7 +7,8 @@ import org.springframework.beans.BeanUtils;
 
 public interface ProductWithoutDetailProducts
 {
-    String getIdProduct();
+    Long getId();
+    String getCodProduct();
     String getNameProduct();
     BrandEntity getBrand();
     ProductTypeEntity getProductType();

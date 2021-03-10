@@ -15,9 +15,9 @@ import java.util.stream.Stream;
 @Repository("DetailProductPersistence")
 public class DetailProductPersistenceMySql implements DetailProductPersistence {
 
-    private DetailProductRepository detailProductRepository;
+    private final DetailProductRepository detailProductRepository;
 
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     @Autowired
     public DetailProductPersistenceMySql(DetailProductRepository detailProductRepository, ProductRepository productRepository) {
@@ -30,7 +30,7 @@ public class DetailProductPersistenceMySql implements DetailProductPersistence {
         if (detailProduct.getIdProduct() == null)
             throw new RuntimeException("Debe ingresar el codigo del producto para registrar la presentacion de producto.");
 
-        ProductEntity product = this.productRepository.findByIdProduct(detailProduct.getIdProduct());
+        ProductEntity product = this.productRepository.findById(detailProduct.getIdProduct()).get();
 
         if (product == null)
             throw new RuntimeException("Producto con codigo <" + detailProduct.getIdProduct() + "> no existe.");
@@ -51,9 +51,9 @@ public class DetailProductPersistenceMySql implements DetailProductPersistence {
     }
 
     @Override
-    public Stream<DetailProduct> findAllDetailProductByIdProduct(String idProduct) {
+    public Stream<DetailProduct> findAllDetailProductByIdProduct(Long idProduct) {
         return this.detailProductRepository
-                .findAllByProductEntity_IdProduct(idProduct, DetailProductWithoutForeignClass.class)
+                .findAllByProductEntity_Id(idProduct, DetailProductWithoutForeignClass.class)
                 .stream().map(DetailProductWithoutForeignClass::toDetailProduct);
     }
 }
