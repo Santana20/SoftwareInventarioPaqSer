@@ -37,6 +37,6 @@ public class ProductTypePersistenceMySql implements ProductTypePersistence {
     @Override
     public Stream<ProductType> listAllProductTypes() {
         return this.productTypeRepository.findAll().stream()
-                .map(productTypeEntity -> productTypeEntity.toProductType());
+                .map(ProductTypeEntity::toProductType);
     }
 }

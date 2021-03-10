@@ -10,6 +10,7 @@ import com.paqser.inventario.domain.persistencePorts.DetailProductPersistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Repository("DetailProductPersistence")
@@ -30,13 +31,14 @@ public class DetailProductPersistenceMySql implements DetailProductPersistence {
         if (detailProduct.getIdProduct() == null)
             throw new RuntimeException("Debe ingresar el codigo del producto para registrar la presentacion de producto.");
 
-        ProductEntity product = this.productRepository.findById(detailProduct.getIdProduct()).get();
+        Optional<ProductEntity> product = this.productRepository.findById(detailProduct.getIdProduct());
 
-        if (product == null)
-            throw new RuntimeException("Producto con codigo <" + detailProduct.getIdProduct() + "> no existe.");
+        if (!product.isPresent()) {
+            throw new RuntimeException("Producto no existe.");
+        }
 
         return this.detailProductRepository
-                .save(new DetailProductEntity(detailProduct, product))
+                .save(new DetailProductEntity(detailProduct, product.get()))
                 .toDetailProduct();
     }
 

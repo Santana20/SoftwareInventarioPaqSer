@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 @Repository
 public interface ProductPersistence {
 
-    Product createProduct(Product newProduct) throws Exception;
+    Product createProduct(Product newProduct);
 
     Product updateProduct(Product updateProduct);
 
