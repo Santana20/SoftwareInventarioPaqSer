@@ -20,6 +20,7 @@ public class SaleResource {
     static final String SALE = "/api/sale";
     static final String EXPORTPDF = "/export";
     static final String LISTSALES = "/list";
+    static final String INVALIDATESALE = "/invalidate/{idSale}";
 
     private final SaleService saleService;
 
@@ -104,5 +105,16 @@ public class SaleResource {
         }
 
         return saleList;
+    }
+    @PutMapping(SaleResource.INVALIDATESALE)
+    public void invalidateSaleByIdSale(@PathVariable(value = "idSale") Long idSale)
+    {
+        try {
+            this.saleService.invalidateSaleByIdSale(idSale);
+        }
+        catch (Exception e)
+        {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 }

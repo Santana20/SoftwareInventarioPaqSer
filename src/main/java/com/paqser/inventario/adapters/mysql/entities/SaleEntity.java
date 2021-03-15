@@ -2,6 +2,8 @@ package com.paqser.inventario.adapters.mysql.entities;
 
 import com.paqser.inventario.domain.models.DetailSale;
 import com.paqser.inventario.domain.models.Sale;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
@@ -13,6 +15,8 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "Sale")
+@Getter
+@Setter
 public class SaleEntity {
 
     @Id
@@ -24,6 +28,8 @@ public class SaleEntity {
     private Date dateSale;
 
     private BigDecimal total;
+
+    private boolean status;
 
     @OneToMany(mappedBy = "saleEntity",
             cascade = CascadeType.ALL,
@@ -54,46 +60,6 @@ public class SaleEntity {
             sale.setDetailSaleList(detailSaleList);
         }
         return sale;
-    }
-
-    public Long getIdSale() {
-        return idSale;
-    }
-
-    public void setIdSale(Long idSale) {
-        this.idSale = idSale;
-    }
-
-    public String getNameClient() {
-        return nameClient;
-    }
-
-    public void setNameClient(String nameClient) {
-        this.nameClient = nameClient;
-    }
-
-    public Date getDateSale() {
-        return dateSale;
-    }
-
-    public void setDateSale(Date dateSale) {
-        this.dateSale = dateSale;
-    }
-
-    public BigDecimal getTotal() {
-        return total;
-    }
-
-    public void setTotal(BigDecimal total) {
-        this.total = total;
-    }
-
-    public List<DetailSaleEntity> getDetailSaleEntityList() {
-        return detailSaleEntityList;
-    }
-
-    public void setDetailSaleEntityList(List<DetailSaleEntity> detailSaleEntityList) {
-        this.detailSaleEntityList = detailSaleEntityList;
     }
 
     @Override

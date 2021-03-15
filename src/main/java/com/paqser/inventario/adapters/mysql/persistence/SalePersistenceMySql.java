@@ -1,13 +1,11 @@
 package com.paqser.inventario.adapters.mysql.persistence;
 
-import com.paqser.inventario.adapters.mysql.projections.DetailProductSimple;
-import com.paqser.inventario.adapters.mysql.projections.SaleWithoutCycles;
-import com.paqser.inventario.adapters.mysql.projections.SaleWithoutDetailSaleList;
 import com.paqser.inventario.adapters.mysql.daos.DetailProductRepository;
 import com.paqser.inventario.adapters.mysql.daos.DetailSaleRepository;
 import com.paqser.inventario.adapters.mysql.daos.SaleRepository;
 import com.paqser.inventario.adapters.mysql.entities.DetailSaleEntity;
 import com.paqser.inventario.adapters.mysql.entities.SaleEntity;
+import com.paqser.inventario.adapters.mysql.projections.*;
 import com.paqser.inventario.domain.models.DetailSale;
 import com.paqser.inventario.domain.models.Sale;
 import com.paqser.inventario.domain.persistencePorts.SalePersistence;
@@ -42,6 +40,7 @@ public class SalePersistenceMySql implements SalePersistence {
     public Sale registerSale(Sale sale) {
         
         sale.setDateSale(new Date());
+        sale.setStatus(true);
         SaleEntity saleEntity = this.saleRepository
                 .save(new SaleEntity(sale));
 
@@ -107,6 +106,28 @@ public class SalePersistenceMySql implements SalePersistence {
 
         return this.saleRepository.findByIdSale(idSale, SaleWithoutCycles.class)
                 .toSale();
+    }
+
+    @Override
+    @Transactional(rollbackFor = { Exception.class })
+    public void invalidateSaleByIdSale(Long idSale) {
+
+        List<DetailSaleWithoutSale> detailSales = this.detailSaleRepository.findAllBySaleEntity_IdSale(idSale, DetailSaleWithoutSale.class);
+
+        for (DetailSaleWithoutSale detailSaleWS : detailSales)
+        {
+            DetailProductWithProductSimple detailProductEntity = detailSaleWS.getDetailProductEntity();
+            if (detailProductEntity != null)
+            {
+                BigDecimal newStock = detailProductEntity.getStock().add(detailSaleWS.getSaleCount());
+                this.detailProductRepository
+                        .updateStockById(detailProductEntity.getIdDetailProduct(),
+                                        newStock);
+            }
+        }
+
+        this.saleRepository.updateStatusByIdSale(idSale, false);
+
     }
 
     private boolean validateDetailSale(int index, DetailSale detailSale,
