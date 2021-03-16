@@ -17,5 +17,5 @@ public interface SalePersistence {
 
     Sale findSaleByIdSale(Long idSale);
 
-    void invalidateSaleByIdSale(Long idSale);
+    void cancelSaleByIdSale(Long idSale);
 }

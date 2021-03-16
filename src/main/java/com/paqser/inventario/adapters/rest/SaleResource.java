@@ -20,7 +20,7 @@ public class SaleResource {
     static final String SALE = "/api/sale";
     static final String EXPORTPDF = "/export";
     static final String LISTSALES = "/list";
-    static final String INVALIDATESALE = "/invalidate/{idSale}";
+    static final String CANCELSALE = "/cancel/{idSale}";
 
     private final SaleService saleService;
 
@@ -106,11 +106,11 @@ public class SaleResource {
 
         return saleList;
     }
-    @PutMapping(SaleResource.INVALIDATESALE)
-    public void invalidateSaleByIdSale(@PathVariable(value = "idSale") Long idSale)
+    @PutMapping(SaleResource.CANCELSALE)
+    public void cancelSaleByIdSale(@PathVariable(value = "idSale") Long idSale)
     {
         try {
-            this.saleService.invalidateSaleByIdSale(idSale);
+            this.saleService.cancelSaleByIdSale(idSale);
         }
         catch (Exception e)
         {

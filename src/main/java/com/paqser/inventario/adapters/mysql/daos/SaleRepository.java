@@ -21,4 +21,6 @@ public interface SaleRepository extends JpaRepository<SaleEntity, Long> {
     @Query("update SaleEntity s set s.status = :status where s.idSale = :id")
     void updateStatusByIdSale(@Param("id") Long idSale,
                               @Param("status") boolean status);
+
+    boolean existsByIdSaleAndStatus(Long idSale, boolean status);
 }

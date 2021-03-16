@@ -14,6 +14,7 @@ public class SaleWithoutDetailSaleList {
     String nameClient;
     Date dateSale;
     BigDecimal total;
+    boolean status;
 
     public Sale toSale()
     {

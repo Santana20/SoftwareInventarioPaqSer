@@ -110,7 +110,11 @@ public class SalePersistenceMySql implements SalePersistence {
 
     @Override
     @Transactional(rollbackFor = { Exception.class })
-    public void invalidateSaleByIdSale(Long idSale) {
+    public void cancelSaleByIdSale(Long idSale) {
+
+        if (this.saleRepository.existsByIdSaleAndStatus(idSale, false)) {
+            throw new RuntimeException("La venta ya fue anulada.");
+        }
 
         List<DetailSaleWithoutSale> detailSales = this.detailSaleRepository.findAllBySaleEntity_IdSale(idSale, DetailSaleWithoutSale.class);
 

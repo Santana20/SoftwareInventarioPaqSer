@@ -15,6 +15,7 @@ public interface SaleWithoutCycles {
     String getNameClient();
     Date getDateSale();
     BigDecimal getTotal();
+    boolean getStatus();
     List<DetailSaleWithoutSale> getDetailSaleEntityList();
 
     default Sale toSale()

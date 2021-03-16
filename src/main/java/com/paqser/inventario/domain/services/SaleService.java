@@ -36,7 +36,7 @@ public class SaleService {
         return this.salePersistence.listSalesByDate(ini, fin, isPDF);
     }
 
-    public void invalidateSaleByIdSale(Long idSale) {
-        this.salePersistence.invalidateSaleByIdSale(idSale);
+    public void cancelSaleByIdSale(Long idSale) {
+        this.salePersistence.cancelSaleByIdSale(idSale);
     }
 }
