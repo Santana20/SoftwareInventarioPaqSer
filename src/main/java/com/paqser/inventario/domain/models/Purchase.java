@@ -11,16 +11,15 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class Sale {
+public class Purchase {
 
-    private Long idSale;
-    private String nameClient;
-    private Date dateSale;
+    private Long idPurchase;
+    private Date datePurchase;
     private BigDecimal total;
-    private boolean status;
-    private List<DetailSale> detailSaleList;
+    private String RUC;
+    private List<DetailPurchase> detailPurchaseList;
 
-    public Sale() {
+    public Purchase() {
         // empty for framework
     }
 

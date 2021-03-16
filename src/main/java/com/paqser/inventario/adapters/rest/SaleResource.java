@@ -33,7 +33,6 @@ public class SaleResource {
     public Sale registerSale(@RequestBody Sale paramSale)
     {
         Sale sale;
-        System.out.println(paramSale);
         try
         {
             sale = this.saleService.registerSale(paramSale);
