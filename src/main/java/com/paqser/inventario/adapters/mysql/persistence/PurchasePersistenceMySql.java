@@ -6,6 +6,7 @@ import com.paqser.inventario.adapters.mysql.daos.PurchaseRepository;
 import com.paqser.inventario.adapters.mysql.entities.DetailPurchaseEntity;
 import com.paqser.inventario.adapters.mysql.entities.PurchaseEntity;
 import com.paqser.inventario.adapters.mysql.projections.DetailProductSimple;
+import com.paqser.inventario.adapters.mysql.projections.PurchaseWithoutDetailPurchaseList;
 import com.paqser.inventario.domain.models.DetailPurchase;
 import com.paqser.inventario.domain.models.DetailSale;
 import com.paqser.inventario.domain.models.Purchase;
@@ -18,6 +19,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Repository("PurchasePersistence")
 public class PurchasePersistenceMySql implements PurchasePersistence {
@@ -80,6 +82,21 @@ public class PurchasePersistenceMySql implements PurchasePersistence {
 
         return purchaseEntity.toPurchase();
 
+    }
+
+    @Override
+    public Stream<Purchase> listSalesByDate(Date dateIni, Date dateFin) {
+
+        return this.purchaseRepository
+                .findAllByDatePurchaseBetween(dateIni, dateFin, PurchaseWithoutDetailPurchaseList.class)
+                .stream().map(PurchaseWithoutDetailPurchaseList::toPurchase);
+    }
+
+    @Override
+    public Stream<Purchase> listPurchases() {
+        return this.purchaseRepository
+                .findAllBy(PurchaseWithoutDetailPurchaseList.class)
+                .stream().map(PurchaseWithoutDetailPurchaseList::toPurchase);
     }
 
     private boolean validateDetailPurchase(int index, DetailPurchase detailPurchase,
