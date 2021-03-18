@@ -1,5 +1,7 @@
 package com.paqser.inventario.domain.models;
 
+import com.paqser.inventario.adapters.mysql.entities.DetailProductEntity;
+
 import java.math.BigDecimal;
 
 public class DetailProduct {

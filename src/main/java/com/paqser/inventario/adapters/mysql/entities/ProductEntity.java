@@ -46,7 +46,7 @@ public class ProductEntity {
         // empty for framework
     }
     public ProductEntity(Product product) {
-        BeanUtils.copyProperties(product, this);
+        this.fromProduct(product);
     }
 
     public void fromProduct(Product product) {
@@ -61,7 +61,7 @@ public class ProductEntity {
         product.setBrand(this.brand.toBrand());
         product.setProductType(this.productType.toProductType());
 
-        if (this.detailProductEntityList != null && this.detailProductEntityList.size() > 0) {
+        if (this.detailProductEntityList != null && !this.detailProductEntityList.isEmpty()) {
             List<DetailProduct> list = new ArrayList<>();
             for (DetailProductEntity detailProductEntity : this.detailProductEntityList) {
                 DetailProduct toDetailProduct = detailProductEntity.toDetailProductForProductConstruct();

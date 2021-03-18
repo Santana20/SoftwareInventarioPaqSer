@@ -1,17 +1,23 @@
 package com.paqser.inventario.adapters.mysql.persistence;
 
 import com.paqser.inventario.adapters.mysql.daos.BrandRepository;
+import com.paqser.inventario.adapters.mysql.daos.DetailProductRepository;
 import com.paqser.inventario.adapters.mysql.daos.ProductRepository;
 import com.paqser.inventario.adapters.mysql.daos.ProductTypeRepository;
 import com.paqser.inventario.adapters.mysql.entities.BrandEntity;
+import com.paqser.inventario.adapters.mysql.entities.DetailProductEntity;
 import com.paqser.inventario.adapters.mysql.entities.ProductEntity;
 import com.paqser.inventario.adapters.mysql.entities.ProductTypeEntity;
 import com.paqser.inventario.adapters.mysql.projections.ProductWithoutDetailProducts;
+import com.paqser.inventario.domain.models.DetailProduct;
 import com.paqser.inventario.domain.models.Product;
 import com.paqser.inventario.domain.persistencePorts.ProductPersistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -25,21 +31,29 @@ public class ProductPersistenceMySql implements ProductPersistence {
 
     private final ProductTypeRepository productTypeRepository;
 
+    private final DetailProductRepository detailProductRepository;
+
     @Autowired
-    public ProductPersistenceMySql(ProductRepository productRepository, BrandRepository brandRepository,
-                                   ProductTypeRepository productTypeRepository) {
+    public ProductPersistenceMySql(ProductRepository productRepository, BrandRepository brandRepository, ProductTypeRepository productTypeRepository, DetailProductRepository detailProductRepository) {
         this.productRepository = productRepository;
         this.brandRepository = brandRepository;
         this.productTypeRepository = productTypeRepository;
+        this.detailProductRepository = detailProductRepository;
     }
 
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public Product createProduct(Product newProduct) {
 
         if (this.productRepository.existsByCodProductAndBrand_IdBrandAndProductType_IdProductTypeAndNameProduct(newProduct.getCodProduct(),
                 newProduct.getIdBrand(), newProduct.getIdProductType(), newProduct.getNameProduct()))
             throw new RuntimeException("Ya existe un producto con dichos atributos");
+
+        if (newProduct.getDetailProductsList() == null || newProduct.getDetailProductsList().isEmpty())
+        {
+            throw new RuntimeException("Debe ingresar COMO MINIMO UNA presentacion del producto para registrarlo.");
+        }
 
         if (newProduct.getIdBrand() == null)
             throw new RuntimeException("Debe ingresar la marca del producto.");
@@ -62,9 +76,21 @@ public class ProductPersistenceMySql implements ProductPersistence {
         productEntity.setBrand(brandEntity.get());
         productEntity.setProductType(productTypeEntity.get());
 
-        return this.productRepository
-                .save(productEntity)
-                .toProduct();
+        productEntity = this.productRepository
+                .save(productEntity);
+
+
+        List<DetailProductEntity> detailProductEntityList = new ArrayList<>();
+
+        for (DetailProduct detailProduct : newProduct.getDetailProductsList())
+        {
+            detailProduct.setStock(BigDecimal.ZERO);
+            detailProductEntityList.add(new DetailProductEntity(detailProduct, productEntity));
+        }
+
+        this.detailProductRepository.saveAll(detailProductEntityList);
+
+        return productEntity.toProduct();
     }
 
     @Override

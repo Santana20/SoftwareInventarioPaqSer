@@ -26,6 +26,8 @@ public class DetailPurchaseEntity {
 
     private BigDecimal subTotal;
 
+    private BigDecimal unitPrice;
+
     @ManyToOne
     @JoinColumn(name = "idDetailProduct")
     private DetailProductEntity detailProductEntity;

@@ -105,7 +105,9 @@ public class PurchasePersistenceMySql implements PurchasePersistence {
         if (detailProductSimple == null)
             throw new RuntimeException("No existe el detalle de producto con codigo: ".concat(String.valueOf(detailPurchase.getIdDetailProduct())));
 
-        BigDecimal subtotal = detailProductSimple.getSalePrice()
+
+
+        BigDecimal subtotal = detailPurchase.getUnitPrice()
                 .multiply(detailPurchase.getQuantity());
 
         if (!detailPurchase.getSubTotal().equals(subtotal))

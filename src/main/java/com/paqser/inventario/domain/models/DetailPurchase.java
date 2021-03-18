@@ -16,6 +16,7 @@ public class DetailPurchase {
     private Long idDetailPurchase;
     private BigDecimal quantity;
     private BigDecimal subTotal;
+    private BigDecimal unitPrice;
     private DetailProduct detailProduct;
     private Purchase purchase;
 

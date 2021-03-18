@@ -1,7 +1,6 @@
 package com.paqser.inventario.adapters.rest;
 
-import com.paqser.inventario.adapters.utils.DTOClass.DetailSalePDF;
-import com.paqser.inventario.domain.models.DetailPurchase;
+import com.paqser.inventario.adapters.utils.DTOClass.DetailPurchasePDF;
 import com.paqser.inventario.domain.services.DetailPurchaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +17,7 @@ import java.util.stream.Stream;
 public class DetailPurchaseResource {
 
     static final String DETAILPURCHASE = "/api/detailPurchase";
-    static final String FINDALLDETAIPURCHASELBYIDPURCHASE = "/listDP/{idPurchase}";
+    static final String FINDALLDETAIPURCHASELBYIDPURCHASE = "/listDPu/{idPurchase}";
 
     private final DetailPurchaseService detailPurchaseService;
 
@@ -28,13 +27,15 @@ public class DetailPurchaseResource {
     }
 
     @GetMapping(DetailPurchaseResource.FINDALLDETAIPURCHASELBYIDPURCHASE)
-    public Stream<DetailPurchase> find(@PathVariable("idPurchase") Long idPurchase)
+    public Stream<DetailPurchasePDF> findAllDetailPurchaseByIdPurchase(@PathVariable("idPurchase") Long idPurchase)
     {
-        Stream<DetailPurchase> detailPurchaseStream;
+        Stream<DetailPurchasePDF> detailPurchaseStream;
 
         try
         {
-            detailPurchaseStream = this.detailPurchaseService.findAllDetailPurchaseByIdPurchase(idPurchase);
+            detailPurchaseStream = this.detailPurchaseService
+                    .findAllDetailPurchaseByIdPurchase(idPurchase)
+                    .map(DetailPurchasePDF::new);
         }
         catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());

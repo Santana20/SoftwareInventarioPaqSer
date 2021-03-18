@@ -9,6 +9,7 @@ public interface DetailPurchaseWithoutPurchase {
     Long getIdDetailPurchase();
     BigDecimal getQuantity();
     BigDecimal getSubTotal();
+    BigDecimal getUnitPrice();
     DetailProductWithProductSimple getDetailProductEntity();
 
     default DetailPurchase toDetailPurchase()
