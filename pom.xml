@@ -9,10 +9,11 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.paqser</groupId>
-    <artifactId>inventario</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>inventario</name>
-    <description>Demo project for Spring Boot</description>
+    <artifactId>inventarioAPI</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+    <name>Rest API PaqSer</name>
+    <description>El API Rest para ser consumido por PaqSerViewSoftware</description>
 
     <properties>
         <java.version>1.8</java.version>
