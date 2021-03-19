@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -72,6 +73,8 @@ public class PurchasePersistenceMySql implements PurchasePersistence {
             i += 1;
         }
 
+        total = total.setScale(2, RoundingMode.HALF_UP);
+
         if (!purchase.getTotal().equals(total)) {
             throw new RuntimeException("Hubo un error al calcular el total de la compra.\n" +
                     "total compra: " + purchase.getTotal() + "\n" +
@@ -108,7 +111,7 @@ public class PurchasePersistenceMySql implements PurchasePersistence {
 
 
         BigDecimal subtotal = detailPurchase.getUnitPrice()
-                .multiply(detailPurchase.getQuantity());
+                .multiply(detailPurchase.getQuantity()).setScale(2, RoundingMode.HALF_UP);;
 
         if (!detailPurchase.getSubTotal().equals(subtotal))
             throw new RuntimeException("Hubo un error al calcular el subtotal del detalle de venta.\n" +

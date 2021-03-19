@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -67,6 +68,8 @@ public class SalePersistenceMySql implements SalePersistence {
             }
 
         }
+
+        total = total.setScale(2, RoundingMode.HALF_UP);
 
         if (!sale.getTotal().equals(total))
             throw new RuntimeException("Hubo un error al calcular el total de la venta.\n" +
@@ -147,7 +150,7 @@ public class SalePersistenceMySql implements SalePersistence {
                     "Stock disponible: " + detailProductSimple.getStock());
 
         BigDecimal subtotal = detailProductSimple.getSalePrice()
-                .multiply(detailSale.getSaleCount());
+                .multiply(detailSale.getSaleCount()).setScale(2, RoundingMode.HALF_UP);
 
         if (!detailSale.getSubTotal().equals(subtotal))
             throw new RuntimeException("Hubo un error al calcular el subtotal del detalle de venta.\n" +

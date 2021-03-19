@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
+    <T> T findById(Long id, Class<T> type);
+
     <T> List<T> findAllBy(Class<T> type);
 
     <T> List<T> findAllByProductType_IdProductType(Long idProductType, Class<T> type);

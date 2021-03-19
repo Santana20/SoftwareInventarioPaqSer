@@ -3,14 +3,13 @@ package com.paqser.inventario.adapters.mysql.persistence;
 import com.paqser.inventario.adapters.mysql.daos.DetailProductRepository;
 import com.paqser.inventario.adapters.mysql.daos.ProductRepository;
 import com.paqser.inventario.adapters.mysql.entities.DetailProductEntity;
-import com.paqser.inventario.adapters.mysql.entities.ProductEntity;
 import com.paqser.inventario.adapters.mysql.projections.DetailProductWithoutForeignClass;
+import com.paqser.inventario.adapters.mysql.projections.ProductWithoutDetailProducts;
 import com.paqser.inventario.domain.models.DetailProduct;
 import com.paqser.inventario.domain.persistencePorts.DetailProductPersistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
 import java.util.stream.Stream;
 
 @Repository("DetailProductPersistence")
@@ -31,14 +30,15 @@ public class DetailProductPersistenceMySql implements DetailProductPersistence {
         if (detailProduct.getIdProduct() == null)
             throw new RuntimeException("Debe ingresar el codigo del producto para registrar la presentacion de producto.");
 
-        Optional<ProductEntity> product = this.productRepository.findById(detailProduct.getIdProduct());
+        ProductWithoutDetailProducts productSimple = this.productRepository
+                .findById(detailProduct.getIdProduct(), ProductWithoutDetailProducts.class);
 
-        if (!product.isPresent()) {
+        if (productSimple == null) {
             throw new RuntimeException("Producto no existe.");
         }
 
         return this.detailProductRepository
-                .save(new DetailProductEntity(detailProduct, product.get()))
+                .save(new DetailProductEntity(detailProduct, productSimple.toProductEntity()))
                 .toDetailProduct();
     }
 

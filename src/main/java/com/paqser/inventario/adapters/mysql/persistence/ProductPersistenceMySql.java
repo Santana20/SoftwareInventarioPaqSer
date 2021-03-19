@@ -50,11 +50,6 @@ public class ProductPersistenceMySql implements ProductPersistence {
                 newProduct.getIdBrand(), newProduct.getIdProductType(), newProduct.getNameProduct()))
             throw new RuntimeException("Ya existe un producto con dichos atributos");
 
-        if (newProduct.getDetailProductsList() == null || newProduct.getDetailProductsList().isEmpty())
-        {
-            throw new RuntimeException("Debe ingresar COMO MINIMO UNA presentacion del producto para registrarlo.");
-        }
-
         if (newProduct.getIdBrand() == null)
             throw new RuntimeException("Debe ingresar la marca del producto.");
 
@@ -79,16 +74,16 @@ public class ProductPersistenceMySql implements ProductPersistence {
         productEntity = this.productRepository
                 .save(productEntity);
 
+        if ( newProduct.getDetailProductsList() != null && (!newProduct.getDetailProductsList().isEmpty()) ) {
+            List<DetailProductEntity> detailProductEntityList = new ArrayList<>();
 
-        List<DetailProductEntity> detailProductEntityList = new ArrayList<>();
+            for (DetailProduct detailProduct : newProduct.getDetailProductsList()) {
+                detailProduct.setStock(BigDecimal.ZERO);
+                detailProductEntityList.add(new DetailProductEntity(detailProduct, productEntity));
+            }
 
-        for (DetailProduct detailProduct : newProduct.getDetailProductsList())
-        {
-            detailProduct.setStock(BigDecimal.ZERO);
-            detailProductEntityList.add(new DetailProductEntity(detailProduct, productEntity));
+            this.detailProductRepository.saveAll(detailProductEntityList);
         }
-
-        this.detailProductRepository.saveAll(detailProductEntityList);
 
         return productEntity.toProduct();
     }
